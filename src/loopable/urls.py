@@ -21,6 +21,7 @@ from django.views.static import serve
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 
+from loopable import urls_api_v1
 from loopable.views import PingPongView
 
 schema_view = get_schema_view(
@@ -40,6 +41,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('stats/ping/', PingPongView.as_view()),
     path('stats/ht/', include('health_check.urls')),
+    path('api/v1/', include(urls_api_v1)),
 ]
 
 if settings.DEBUG or settings.SWAGGER_ALLOWED:  # Swagger only if allowed
