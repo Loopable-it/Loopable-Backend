@@ -25,4 +25,4 @@ jobs:
           DJANGO_DEBUG: TRUE
           DJANGO_SETTINGS_MODULE: loopable.settings
           DJANGO_ENV: LOCAL
-        run: python manage.py test -v 2
+        run: python src/manage.py test -v 2
