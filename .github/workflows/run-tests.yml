@@ -22,9 +22,9 @@ jobs:
           pip install -r requirements.txt
       - name: Execute tests
         env:
-          DJANGO_DEBUG: ${{ env.DJANGO_DEBUG }}
-          DJANGO_ENV: ${{ env.DJANGO_ENV }}
-          DJANGO_SETTINGS_MODULE: ${{ env.DJANGO_SETTINGS_MODULE }}
+          DJANGO_DEBUG: 'TRUE'
+          DJANGO_ENV: 'LOCAL'
+          DJANGO_SETTINGS_MODULE: 'loopable.settings'
           DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
           FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
           FIREBASE_CLIENT_CERT_URL: ${{ secrets.FIREBASE_CLIENT_CERT_URL }}
