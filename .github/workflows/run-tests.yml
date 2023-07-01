@@ -9,6 +9,7 @@ on:
 jobs:
   execute_tests:
     name: Execute Django tests
+    environment: PRODUCTION_FIREBASE
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -36,4 +37,4 @@ jobs:
           FIREBASE_TEST_USER1_PWD: ${{ secrets.FIREBASE_TEST_USER1_PWD }}
           FIREBASE_TEST_USER2_EMAIL: ${{ env.FIREBASE_TEST_USER2_EMAIL }}
           FIREBASE_TEST_USER2_PWD: ${{ secrets.FIREBASE_TEST_USER2_PWD }}
-        run: python src/manage.py test -v 2 --settings=loopable.settings
+        run: python src/manage.py test -v 2
