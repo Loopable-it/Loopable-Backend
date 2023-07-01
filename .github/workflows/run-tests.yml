@@ -23,9 +23,9 @@ jobs:
           pip install -r requirements.txt
       - name: Execute tests
         env:
-          DJANGO_DEBUG: 'TRUE'
-          DJANGO_ENV: 'LOCAL'
-          DJANGO_SETTINGS_MODULE: 'loopable.settings'
+          DJANGO_DEBUG: ${{ vars.DJANGO_DEBUG }}
+          DJANGO_ENV: ${{ vars.DJANGO_ENV }}
+          DJANGO_SETTINGS_MODULE: ${{ vars.DJANGO_SETTINGS_MODULE }}
           DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
           FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
           FIREBASE_CLIENT_CERT_URL: ${{ secrets.FIREBASE_CLIENT_CERT_URL }}
@@ -33,8 +33,8 @@ jobs:
           FIREBASE_PRIVATE_KEY: ${{ secrets.FIREBASE_PRIVATE_KEY }}
           FIREBASE_PRIVATE_KEY_ID: ${{ secrets.FIREBASE_PRIVATE_KEY_ID }}
           FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
-          FIREBASE_TEST_USER1_EMAIL: ${{ env.FIREBASE_TEST_USER1_EMAIL }}
+          FIREBASE_TEST_USER1_EMAIL: ${{ vars.FIREBASE_TEST_USER1_EMAIL }}
           FIREBASE_TEST_USER1_PWD: ${{ secrets.FIREBASE_TEST_USER1_PWD }}
-          FIREBASE_TEST_USER2_EMAIL: ${{ env.FIREBASE_TEST_USER2_EMAIL }}
+          FIREBASE_TEST_USER2_EMAIL: ${{ vars.FIREBASE_TEST_USER2_EMAIL }}
           FIREBASE_TEST_USER2_PWD: ${{ secrets.FIREBASE_TEST_USER2_PWD }}
         run: python src/manage.py test -v 2
