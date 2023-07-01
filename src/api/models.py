@@ -41,7 +41,7 @@ def create_user_profile(sender, instance, created, **kwargs):
         Profile.objects.create(id=instance.username, user=instance)
 
 
-class Category(models.Model):
+class ProductCategory(models.Model):
     name = models.CharField(max_length=32, primary_key=True, unique=True)
     description = models.CharField(max_length=512, null=True)
 
@@ -58,7 +58,7 @@ class Product(models.Model):
     description = models.CharField(max_length=2048)
     owner = models.ForeignKey(Profile, on_delete=models.PROTECT, related_name='products')
     price = models.DecimalField(max_digits=5, decimal_places=2)
-    category = models.ForeignKey(Category, on_delete=models.PROTECT, related_name='products_list')
+    category = models.ForeignKey(ProductCategory, on_delete=models.PROTECT, related_name='products_list')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

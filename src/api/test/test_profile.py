@@ -2,8 +2,8 @@ from django.contrib.auth.models import User
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from users.models import Profile
-from users.test.firebase_login import get_test_user_client
+from api.models import Profile
+from api.test.firebase_login import get_test_user_client
 
 
 class UsersAPITests(APITestCase):

@@ -1,12 +1,12 @@
 from rest_framework import serializers
 
-from users.models import *
+from api.models import *
 
 
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = ('id', 'name', 'lastname', 'type', 'is_verified')
+        fields = ('id', 'name', 'lastname', 'type', 'is_verified', 'image')
 
 
 class ProfileSerializerUpdate(serializers.ModelSerializer):

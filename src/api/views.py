@@ -1,10 +1,10 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, filters
-from users.permissions import *
-from users.serializers import *
+from api.permissions import *
+from api.serializers import *
 
 
-# /
+# /users/
 class ProfileListAPIView(generics.ListAPIView):
     queryset = Profile.objects.exclude(type__in=['SYS']).order_by('created_at')
     serializer_class = ProfileSerializer
@@ -14,7 +14,7 @@ class ProfileListAPIView(generics.ListAPIView):
     ordering_fields = ['name', 'lastname']  # ?ordering=-username
 
 
-# /<str:pk>/ (only owner of account can update)
+# /users/<str:pk>/ (only owner of account can update)
 class ProfileRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
     http_method_names = ['get', 'patch', 'options']
     queryset = Profile.objects.all()

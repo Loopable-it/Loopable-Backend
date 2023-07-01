@@ -1,7 +1,7 @@
 from django.apps import AppConfig
 
 
-class UsersAndPetsConfig(AppConfig):
+class ApiConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'users'
-    verbose_name = 'User profiles'
+    name = 'api'
+    verbose_name = 'APIs'

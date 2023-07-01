@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'health_check.db',
     'health_check.contrib.migrations',
     'firebase_utility',
-    'users',
+    'api',
 ]
 
 MIDDLEWARE = [
