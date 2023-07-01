@@ -7,7 +7,6 @@ import uuid
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -39,7 +38,8 @@ class Migration(migrations.Migration):
                 ('id', models.CharField(max_length=32, primary_key=True, serialize=False, unique=True)),
                 ('name', models.CharField(max_length=32, null=True)),
                 ('lastname', models.CharField(max_length=32, null=True)),
-                ('type', models.CharField(choices=[('STD', 'Standard'), ('BUS', 'Business'), ('SYS', 'System')], default='STD', max_length=3)),
+                ('type', models.CharField(choices=[('STD', 'Standard'), ('BUS', 'Business'), ('SYS', 'System')],
+                                          default='STD', max_length=3)),
                 ('is_verified', models.BooleanField(default=False)),
                 ('sign_in_provider', models.CharField(max_length=32)),
                 ('province', models.CharField(max_length=64, null=True)),
@@ -49,7 +49,8 @@ class Migration(migrations.Migration):
                 ('allow_notifications', models.BooleanField(default=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
-                ('user', models.OneToOneField(on_delete=django.db.models.deletion.PROTECT, related_name='profile', to=settings.AUTH_USER_MODEL)),
+                ('user', models.OneToOneField(on_delete=django.db.models.deletion.PROTECT, related_name='profile',
+                                              to=settings.AUTH_USER_MODEL)),
             ],
         ),
         migrations.CreateModel(
@@ -58,17 +59,20 @@ class Migration(migrations.Migration):
                 ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
                 ('image', models.CharField(max_length=1024)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('product', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='images', to='api.product')),
+                ('product', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='images',
+                                              to='api.product')),
             ],
         ),
         migrations.AddField(
             model_name='product',
             name='category',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='products_list', to='api.productcategory'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='products_list',
+                                    to='api.productcategory'),  # noqa
         ),
         migrations.AddField(
             model_name='product',
             name='owner',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='products', to='api.profile'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='products',
+                                    to='api.profile'),
         ),
     ]

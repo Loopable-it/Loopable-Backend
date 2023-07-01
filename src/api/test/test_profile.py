@@ -94,3 +94,17 @@ class UsersAPITests(APITestCase):
             'allow_notifications': True,
         }
         assert response.json().items() >= resp_test.items()  # Check if all keys and values are in response
+
+    def test_profile_update_permission(self):
+        """
+        Ensure profile update view works only for the owner.
+        """
+        profile = Profile.objects.all()[0]
+
+        self.auth_client2 = get_test_user_client('USER2')
+        response = self.auth_client.get('/api/v1/users/')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        data = {'name': 'Alex', 'lastname': 'Vellons'}
+        response = self.auth_client2.patch('/api/v1/users/{}/'.format(profile.id), data)  # USER2 try to update USER1
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
