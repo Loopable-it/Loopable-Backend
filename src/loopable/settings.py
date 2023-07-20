@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 import os
 from pathlib import Path
 
+import dj_database_url
+
 # Base backend settings
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 if SECRET_KEY is None:
@@ -78,12 +80,20 @@ WSGI_APPLICATION = 'loopable.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+# Database
+# https://docs.djangoproject.com/en/4.0/ref/settings/#databases
+DATABASES = {}
+DB_CONF = dj_database_url.config(conn_max_age=600, ssl_require=True)  # From DATABASE_URL env var
+if len(DB_CONF) == 0:
+    raise EnvironmentError('Bad DB configuration. Current conf: {} You need to set DATABASE_URL'.format(DB_CONF))
+DATABASES['default'] = DB_CONF
+
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.sqlite3',
+#        'NAME': BASE_DIR / 'db.sqlite3',
+#    }
+#}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
