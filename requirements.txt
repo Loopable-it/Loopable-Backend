@@ -18,3 +18,4 @@ sqlparse==0.4.4
 typing_extensions==4.7.0
 uritemplate==4.1.1
 gunicorn==21.2.0
+python-dotenv==1.0.0

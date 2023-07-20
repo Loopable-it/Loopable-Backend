@@ -10,9 +10,13 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
+import sys
 from pathlib import Path
 
 import dj_database_url
+from dotenv import load_dotenv
+
+load_dotenv()  # Take environment variables from .env file.
 
 # Base backend settings
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
@@ -58,7 +62,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'src.loopable.urls'
+ROOT_URLCONF = 'loopable.urls'
 
 TEMPLATES = [
     {
@@ -82,18 +86,20 @@ WSGI_APPLICATION = 'loopable.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
-DATABASES = {}
-DB_CONF = dj_database_url.config(conn_max_age=600, ssl_require=True)  # From DATABASE_URL env var
-if len(DB_CONF) == 0:
-    raise EnvironmentError('Bad DB configuration. Current conf: {} You need to set DATABASE_URL'.format(DB_CONF))
-DATABASES['default'] = DB_CONF
-
-#DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.sqlite3',
-#        'NAME': BASE_DIR / 'db.sqlite3',
-#    }
-#}
+if 'test' in sys.argv:
+    # Database for test coverage
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
+else:
+    DATABASES = {}
+    DB_CONF = dj_database_url.config(conn_max_age=600, ssl_require=True)  # From DATABASE_URL env var
+    if len(DB_CONF) == 0:
+        raise EnvironmentError('Bad DB configuration. Current conf: {} You need to set DATABASE_URL'.format(DB_CONF))
+    DATABASES['default'] = DB_CONF
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
