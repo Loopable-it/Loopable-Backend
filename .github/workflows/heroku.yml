@@ -20,3 +20,4 @@ jobs:
         heroku_email_address: ${{ secrets.HEROKU_API_EMAIL }}
         use_git: true
         git_branch: main
+        disable_collect_static: true
