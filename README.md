@@ -19,20 +19,20 @@ env\Scripts\activate # On Windows
 pip install -r requirements.txt
 ```
 
-To run the project **make sure to have all the environment variables set**. 
+To run the project **make sure to have all the environment variables set in the .env file**. 
 Then, you can run the project with the following command:
 ```bash
 python3 src/manage.py runserver 8000
 ```
 
 ## Run the tests
-To run the tests, **make sure to have all the environment variables set** and then run the following command:
+To run the tests, **make sure to have all the environment variables  set in the .env file** and then run the following command:
 ```bash
 python3 src/manage.py test -v 2
 ```
 
 ## Migration
-To run the migration, **make sure to have all the environment variables set** and then run the following command:
+To run the migration, **make sure to have all the environment variables  set in the .env file** and then run the following command:
 ```bash
 python3 src/manage.py makemigrations
 python3 src/manage.py migrate
