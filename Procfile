@@ -1,1 +1,1 @@
-web: gunicorn --chdir src/ loopable.wsgi:application
+web: python src/manage.py collectstatic && gunicorn --chdir src/ loopable.wsgi:application
