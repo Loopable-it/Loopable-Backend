@@ -42,7 +42,7 @@ def create_user_profile(sender, instance, created, **kwargs):
 
 
 class ProductCategory(models.Model):
-    name = models.CharField(max_length=32, primary_key=True, unique=True)
+    name = models.CharField(max_length=32, unique=True)
     description = models.CharField(max_length=512, null=True)
 
     def __repr__(self):

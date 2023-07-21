@@ -28,7 +28,9 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='ProductCategory',
             fields=[
-                ('name', models.CharField(max_length=32, primary_key=True, serialize=False, unique=True)),
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False,
+                                           verbose_name='ID')),
+                ('name', models.CharField(max_length=32, unique=True)),
                 ('description', models.CharField(max_length=512, null=True)),
             ],
         ),
