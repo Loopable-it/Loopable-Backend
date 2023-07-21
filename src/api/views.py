@@ -2,6 +2,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, filters
 from api.permissions import *
 from api.serializers import *
+from loopable.pagination import CustomPagination
 
 
 # /users/
@@ -25,3 +26,22 @@ class ProfileRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
         if self.request.method == 'PATCH':
             return ProfileSerializerUpdate
         return ProfileSerializer
+
+
+# /product-category/
+class ProductCategoryListAPIView(generics.ListAPIView):
+    queryset = ProductCategory.objects.all()
+    serializer_class = ProductCategorySerializer
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
+    filterset_fields = ['id', 'name']
+    ordering_fields = ['name']  # ?ordering=-name
+
+
+# /products/
+class ProductListAPIView(generics.ListAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    pagination_class = CustomPagination
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
+    filterset_fields = ['id', 'name', 'category']
+    ordering_fields = ['name']  # ?ordering=-name

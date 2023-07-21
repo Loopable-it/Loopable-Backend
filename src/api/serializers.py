@@ -18,3 +18,23 @@ class ProfileSerializerUpdate(serializers.ModelSerializer):
         model = Profile
         read_only_fields = ('id', 'user', 'type', 'is_verified', 'sign_in_provider', 'created_at', 'updated_at')
         exclude = ('user',)
+
+
+class ProductCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductCategory
+        fields = '__all__'
+
+
+class ProductImageSerializer:
+    class Meta:
+        model = ProductImage
+        fields = '__all__'
+
+
+class ProductSerializer(serializers.ModelSerializer):
+    #images = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Product
+        fields = '__all__'
