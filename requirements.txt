@@ -5,7 +5,7 @@ Django==4.2.3
 django-health-check==3.17.0
 djangorestframework==3.14.0
 django_filter==23.2
-dj-database-url==1.0.0
+dj-database-url==2.0.0
 drf-yasg==1.21.7
 firebase_admin==6.2.0
 inflection==0.5.1
