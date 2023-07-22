@@ -26,15 +26,19 @@ class ProductCategorySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class ProductImageSerializer:
+class ProductImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductImage
         fields = '__all__'
 
 
 class ProductSerializer(serializers.ModelSerializer):
-    #images = serializers.SerializerMethodField()
+    images = serializers.SerializerMethodField()
 
     class Meta:
         model = Product
         fields = '__all__'
+
+    @staticmethod
+    def get_images(obj):
+        return ProductImageSerializer(obj.images.all(), many=True).data

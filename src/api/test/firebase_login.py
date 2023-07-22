@@ -4,6 +4,8 @@ import requests
 from django.conf import settings
 from rest_framework.test import APIClient
 
+from api.models import Profile
+
 
 def get_jwt_token(email: str, password: str) -> str:
     url = '{}?key={}'.format(settings.FIREBASE_USER_VERIFY_SERVICE, settings.FIREBASE_API_KEY)
@@ -31,3 +33,8 @@ def get_test_user_client(username) -> APIClient:
     client = APIClient()
     client.credentials(HTTP_AUTHORIZATION=jwt)
     return client
+
+
+def get_profile(username: str = 'USER1') -> Profile:
+    email = os.getenv('FIREBASE_TEST_{}_EMAIL'.format(username), None)
+    return Profile.objects.get(user__email=email)

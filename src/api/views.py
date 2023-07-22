@@ -30,18 +30,19 @@ class ProfileRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
 
 # /product-category/
 class ProductCategoryListAPIView(generics.ListAPIView):
-    queryset = ProductCategory.objects.all()
+    queryset = ProductCategory.objects.all().order_by('id')
     serializer_class = ProductCategorySerializer
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
     filterset_fields = ['id', 'name']
-    ordering_fields = ['name']  # ?ordering=-name
+    ordering_fields = ['name']
 
 
 # /products/
-class ProductListAPIView(generics.ListAPIView):
-    queryset = Product.objects.all()
+class ProductListAPIView(generics.ListCreateAPIView):
+    queryset = Product.objects.prefetch_related('images').all().order_by('created_at')
     serializer_class = ProductSerializer
     pagination_class = CustomPagination
-    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
-    filterset_fields = ['id', 'name', 'category']
-    ordering_fields = ['name']  # ?ordering=-name
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['id', 'name', 'category', 'owner']
+    search_fields = ['name']  # ?search=LIKE in all these fields
+    ordering_fields = ['name']
