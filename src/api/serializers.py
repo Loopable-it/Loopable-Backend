@@ -42,3 +42,9 @@ class ProductSerializer(serializers.ModelSerializer):
     @staticmethod
     def get_images(obj):
         return ProductImageSerializer(obj.images.all(), many=True).data
+
+
+class ProductReviewsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductReviews
+        fields = '__all__'

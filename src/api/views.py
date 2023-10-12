@@ -46,3 +46,12 @@ class ProductListAPIView(generics.ListCreateAPIView):
     filterset_fields = ['id', 'name', 'category', 'owner']
     search_fields = ['name']  # ?search=LIKE in all these fields
     ordering_fields = ['name']
+
+
+# /reviews/
+class ProductReviewsListCreateAPIView(generics.ListCreateAPIView):
+    queryset = ProductReviews.objects.all().order_by('created_at')
+    serializer_class = ProductReviewsSerializer
+    pagination_class = CustomPagination
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['content']

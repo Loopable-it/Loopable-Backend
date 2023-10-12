@@ -1,6 +1,7 @@
 import uuid
 
 from django.contrib.auth.models import User
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -80,3 +81,12 @@ class ProductImage(models.Model):
 
     def __str__(self):
         return '{}'.format(self.image)
+
+
+class ProductReviews(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='product_reviews')
+    owner = models.ForeignKey(Profile, on_delete=models.PROTECT, related_name='reviews')
+    content = models.TextField(max_length=4096)
+    rating = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1), MaxValueValidator(5)])
+    created_at = models.DateTimeField(auto_now_add=True)
