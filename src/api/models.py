@@ -90,3 +90,9 @@ class ProductReviews(models.Model):
     content = models.TextField(max_length=4096)
     rating = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1), MaxValueValidator(5)])
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def __repr__(self):
+        return '<ProductReviews {} {}>'.format(self.id, self.content)
+
+    def __str__(self):
+        return '{}'.format(self.content)
