@@ -1,5 +1,8 @@
 import requests
 import os
+from dotenv import load_dotenv
+
+load_dotenv()  # Take environment variables from .env file.
 
 # https://firebase.google.com/docs/reference/rest/auth#section-sign-in-email-password
 FIREBASE_USER_VERIFY_SERVICE = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword'
@@ -28,14 +31,14 @@ if __name__ == '__main__':
 
     r = user_login(input_email, input_password)
     print(r)
-
-    print('localId: {}'.format(r['localId']))
-    print('refreshToken: {}'.format(r['refreshToken']))
+    print()
+    print('localId: {}\n'.format(r['localId']))
+    print('refreshToken: {}\n'.format(r['refreshToken']))
     print('idToken: {}'.format(r['idToken']))
 
     """
     Now you cat make http request with 'Authorization' header that contains idToken
     
-    curl --location --request GET 'http://localhost:8000/api/users/' \
+    curl --location --request GET 'http://localhost:8000/api/v1/product-category/' \
         --header 'Authorization: eyJhbGZ......'
     """

@@ -91,15 +91,23 @@ if 'test' in sys.argv:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
+            'NAME': BASE_DIR / 'db_test.sqlite3',
         }
     }
-else:
+elif ENVIRONMENT == 'PRODUCTION':
     DATABASES = {}
     DB_CONF = dj_database_url.config(conn_max_age=600, ssl_require=True)  # From DATABASE_URL env var
     if len(DB_CONF) == 0:
         raise EnvironmentError('Bad DB configuration. Current conf: {} You need to set DATABASE_URL'.format(DB_CONF))
     DATABASES['default'] = DB_CONF
+else:
+    # Database for local development
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db_local.sqlite3',
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
