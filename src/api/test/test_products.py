@@ -29,17 +29,19 @@ class ProductsAPITests(APITestCase):
         ProductCategory.objects.create(id=2, name='Category 2', description='Category 2 description')
         ProductCategory.objects.create(id=3, name='Category 3', description='Category 3 description')
         self.p1 = Product.objects.create(name='Product 1 ABC', description='Product 1 description',
-                                         owner=self.profile1, price=10.00, category_id=1)
-        self.p2 = Product.objects.create(name='Product 2 BCD', description='Product 2 description',
-                                         owner=self.profile1, price=20.00, category_id=2)
+                                         owner=self.profile1, price=10.00, category_id=1, latitude=10.0, longitude=10.0)
+        self.p2 = Product.objects.create(name='Product 2 BCD', description='Product 2 description', stock_quantity=3,
+                                         owner=self.profile1, price=20.00, category_id=2, latitude=20.0, longitude=20.0)
         self.p3 = Product.objects.create(name='Product 3 XYZ', description='Product 3 description',
-                                         owner=self.profile2, price=30.00, category_id=2)
+                                         owner=self.profile2, price=30.00, category_id=2, latitude=30.0, longitude=30.0)
+        self.p4 = Product.objects.create(name='Product 4 not active', description='Product 3 description', active=False,
+                                         owner=self.profile2, price=30.00, category_id=2, latitude=30.0, longitude=30.0)
 
     def test_no_token(self):
         """
         Ensure api return 401 if no token is passed in the Authorization header.
         """
-        response = self.client.get('/api/v1/product-category/')
+        response = self.client.get('/api/v1/product-categories/')
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
         response = self.client.get('/api/v1/products/')
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
@@ -48,16 +50,16 @@ class ProductsAPITests(APITestCase):
         """
         Ensure product category list view works.
         """
-        response = self.auth_client.get('/api/v1/product-category/')
+        response = self.auth_client.get('/api/v1/product-categories/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.json()), 3)
 
         # Test filters
-        response = self.auth_client.get('/api/v1/product-category/', {'id': '2'})
+        response = self.auth_client.get('/api/v1/product-categories/', {'id': '2'})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.json()), 1)
 
-        response = self.auth_client.get('/api/v1/product-category/', {'name': 'Category 1'})
+        response = self.auth_client.get('/api/v1/product-categories/', {'name': 'Category 1'})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.json()), 1)
 
@@ -67,7 +69,7 @@ class ProductsAPITests(APITestCase):
         """
         response = self.auth_client.get('/api/v1/products/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.json()['results']), 3)
+        self.assertEqual(len(response.json()['results']), 4)
 
         # Test filters
         response = self.auth_client.get('/api/v1/products/', {'id': self.p1.id})
@@ -80,12 +82,46 @@ class ProductsAPITests(APITestCase):
 
         response = self.auth_client.get('/api/v1/products/', {'category': '2'})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.json()['results']), 2)
+        self.assertEqual(len(response.json()['results']), 3)
+
+        response = self.auth_client.get('/api/v1/products/', {'active': 'false'})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.json()['results']), 1)
+
+        response = self.auth_client.get('/api/v1/products/', {'stock_quantity': '3'})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.json()['results']), 1)
 
         response = self.auth_client.get('/api/v1/products/', {'owner': self.profile1.id})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.json()['results']), 2)
 
+        response = self.auth_client.get('/api/v1/products/', {'owner': 'not-an-owner'})
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
         response = self.auth_client.get('/api/v1/products/', {'search': 'BC'})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.json()['results']), 2)
+
+    def test_product_create(self):
+        """
+        Ensure product create view works.
+        """
+        response = self.auth_client.post('/api/v1/products/', {})
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+        # owner is taken from logged user (jwt token)
+        response = self.auth_client.post('/api/v1/products/', {
+            'name': 'Product 5',
+            'description': 'Product 5 description',
+            'price': 40.00,
+            'category': 3,
+            'latitude': 40.0,
+            'longitude': 40.0,
+        })
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(Product.objects.count(), 5)
+        self.p5 = Product.objects.get(name='Product 5')
+        self.assertEqual(self.p5.owner.id, self.profile1.id)  # Check if owner is taken from logged user
+        self.assertEqual(self.p5.active, True)
+        self.assertEqual(self.p5.stock_quantity, 1)
