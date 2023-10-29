@@ -49,3 +49,22 @@ class ProductReviewsSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductReviews
         fields = '__all__'
+    
+    
+# TODO: REVIEW AND TEST RentSerializer AND RentStatusSerializer
+
+class RentStatusSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RentStatus
+        fields = '__all__'
+        read_only_fields = ('id')
+
+
+class RentSerializer(serializers.ModelSerializer):
+    status = RentStatusSerializer(read_only=True)
+    
+    class Meta:
+        model = Rent
+        fields = '__all__'
+        read_only_fields = ('id', 'renter', 'product')
+        

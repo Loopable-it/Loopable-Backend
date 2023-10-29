@@ -12,6 +12,13 @@ PROFILE_TYPE_CHOICES = [
     ('SYS', 'System')
 ]
 
+PAYMENT_METHOD_CHOICES = [
+    ('OPP', 'OnPlacePayment'),
+    ('CARD', 'Card'),
+    ('PAYPAL', 'PayPal'),
+    ('BANK', 'BankTransfer')
+]
+
 
 class Profile(models.Model):
     id = models.CharField(max_length=32, primary_key=True, unique=True)  # Firebase UID
@@ -34,6 +41,19 @@ class Profile(models.Model):
 
     def __str__(self):
         return '@{}'.format(self.id)
+    
+    
+class Business(models.Model):
+    id = models.CharField(max_length=32, primary_key=True, unique=True)
+    name = models.CharField(max_length=32, null=True)
+    location = models.PointField(null=True)
+    owner = models.OneToOneField(Profile, on_delete=models.PROTECT, related_name='business')
+    description = models.CharField(max_length=512, null=True)
+    image = models.CharField(max_length=1024, null=True)
+    phone = models.CharField(max_length=32, null=True)
+    website = models.CharField(max_length=128, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
 
 @receiver(post_save, sender=User)  # Received from firebase_auth
@@ -100,3 +120,23 @@ class ProductReviews(models.Model):
 
     def __str__(self):
         return '{}'.format(self.content)
+    
+    
+# TODO: REVIEW AND TEST Rent AND RentStatus    
+
+class Rent(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
+    payment_method = models.CharField(max_length=32, choices=PAYMENT_METHOD_CHOICES, default='OPP')
+    price = models.DecimalField(max_digits=5, decimal_places=2)
+    renter = models.ForeignKey(Profile, on_delete=models.PROTECT, related_name='rents')
+    product = models.ForeignKey(Product, on_delete=models.PROTECT, related_name='rents')
+    status = models.ForeignKey('RentStatus', on_delete=models.PROTECT, related_name='rents')
+    
+
+class RentStatus(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField(max_length=32)
+    description = models.CharField(max_length=512, null=True)  
+    
