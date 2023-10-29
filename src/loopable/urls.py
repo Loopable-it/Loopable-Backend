@@ -21,7 +21,7 @@ from django.views.static import serve
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 
-from loopable.views import PingPongView
+from loopable.views import PingPongView, custom404, custom500
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -35,6 +35,10 @@ schema_view = get_schema_view(
     permission_classes=(),  # noqa
     authentication_classes=()  # noqa
 )
+
+if not settings.DEBUG:
+    handler404 = custom404
+    handler500 = custom500
 
 urlpatterns = [
     path('admin/', admin.site.urls),
