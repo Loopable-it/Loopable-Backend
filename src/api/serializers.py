@@ -49,3 +49,11 @@ class ProductReviewsSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductReviews
         fields = '__all__'
+
+
+class RentSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Rent
+        fields = '__all__'
+        read_only_fields = ('id', 'renter')

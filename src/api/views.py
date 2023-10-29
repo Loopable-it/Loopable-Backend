@@ -59,3 +59,17 @@ class ProductReviewsListCreateAPIView(generics.ListCreateAPIView):
     pagination_class = CustomPagination
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['content']
+
+
+# /rents/
+class RentListCreateAPIView(generics.ListCreateAPIView):
+    queryset = Rent.objects.all().order_by('-start_time')
+    serializer_class = RentSerializer
+    pagination_class = CustomPagination
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
+    filterset_fields = ['id', 'renter', 'product', 'status']
+    ordering_fields = ['start_time']
+
+    def perform_create(self, serializer):
+        # Get owner from the request
+        serializer.save(renter=self.request.user.profile, status='pending', payment_method='OPP')

@@ -8,14 +8,14 @@ urlpatterns = [
     path('product-categories/', views.ProductCategoryListAPIView.as_view()),
     path('products/', views.ProductListAPIView.as_view()),
     path('reviews/', views.ProductReviewsListCreateAPIView.as_view()),
+    path('rents/', views.RentListCreateAPIView.as_view()),
 ]
 
 
 """
-TODOOO:
-- creare modello RentStatus (pending, accepted, refused, canceled, completed)
-- creare modello Rent
+TODOOOOOOO:
 - creare modello Business
+- serializzare errore 404, 500 come json
 
 - [GET, PATCH] /products/<str:pk>/ (only owner of product can update)
     visualizzazione e aggiornamento prodotto (si può copiare dal servizio users/<str:pk>/)

@@ -12,6 +12,20 @@ PROFILE_TYPE_CHOICES = [
     ('SYS', 'System')
 ]
 
+PAYMENT_METHOD_CHOICES = [
+     ('OPP', 'OnPlacePayment'),
+     ('CARD', 'Card'),
+     ('PAYPAL', 'PayPal'),
+     ('BANK', 'BankTransfer')
+ ]
+
+RENT_STATUS_CHOICES = [
+    ('pending', 'Pending'),
+    ('accepted', 'Accepted'),
+    ('rejected', 'Rejected'),
+    ('canceled', 'Canceled'),
+]
+
 
 class Profile(models.Model):
     id = models.CharField(max_length=32, primary_key=True, unique=True)  # Firebase UID
@@ -100,3 +114,16 @@ class ProductReviews(models.Model):
 
     def __str__(self):
         return '{}'.format(self.content)
+
+
+class Rent(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
+    payment_method = models.CharField(max_length=6, choices=PAYMENT_METHOD_CHOICES, default='OPP')
+    price = models.DecimalField(max_digits=5, decimal_places=2)
+    renter = models.ForeignKey(Profile, on_delete=models.PROTECT, related_name='rents')
+    product = models.ForeignKey(Product, on_delete=models.PROTECT, related_name='product_rents')
+    status = models.CharField(max_length=8, choices=RENT_STATUS_CHOICES, default='pending')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
