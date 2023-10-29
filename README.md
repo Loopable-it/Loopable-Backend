@@ -66,9 +66,11 @@ You can use this token to authenticate your requests to the API filling the `Aut
 
 You can use Postman to test the APIs. or you can use `curl` from the command line:
 ```bash
-curl --location --request GET 'http://localhost:8000/api/v1/product-category/' \
+curl --location --request GET 'http://localhost:8000/api/v1/product-categories/' \
         --header 'Authorization: eyJhbGZ......'
 ```
+
+Take a look to the swagger here: http://localhost:8000/swagger/.
 
 ## Run the tests
 To run the tests, **make sure to have all the environment variables set in the `.env` file** and then 

@@ -39,6 +39,6 @@ if __name__ == '__main__':
     """
     Now you cat make http request with 'Authorization' header that contains idToken
     
-    curl --location --request GET 'http://localhost:8000/api/v1/product-category/' \
+    curl --location --request GET 'http://localhost:8000/api/v1/product-categories/' \
         --header 'Authorization: eyJhbGZ......'
     """
