@@ -60,6 +60,10 @@ class Product(models.Model):
     owner = models.ForeignKey(Profile, on_delete=models.PROTECT, related_name='products')
     price = models.DecimalField(max_digits=5, decimal_places=2)
     category = models.ForeignKey(ProductCategory, on_delete=models.PROTECT, related_name='products_list')
+    stock_quantity = models.PositiveIntegerField(default=1)
+    active = models.BooleanField(default=True)
+    latitude = models.FloatField()  # TODO: use PostGIS
+    longitude = models.FloatField()  # TODO: use PostGIS
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

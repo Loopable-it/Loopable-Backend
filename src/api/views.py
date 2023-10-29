@@ -28,7 +28,7 @@ class ProfileRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
         return ProfileSerializer
 
 
-# /product-category/
+# /product-categories/
 class ProductCategoryListAPIView(generics.ListAPIView):
     queryset = ProductCategory.objects.all().order_by('id')
     serializer_class = ProductCategorySerializer
@@ -43,9 +43,13 @@ class ProductListAPIView(generics.ListCreateAPIView):
     serializer_class = ProductSerializer
     pagination_class = CustomPagination
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['id', 'name', 'category', 'owner']
+    filterset_fields = ['id', 'name', 'category', 'owner', 'active', 'stock_quantity']
     search_fields = ['name']  # ?search=LIKE in all these fields
     ordering_fields = ['name']
+
+    def perform_create(self, serializer):
+        # Get owner from the request
+        serializer.save(owner=self.request.user.profile)
 
 
 # /reviews/
