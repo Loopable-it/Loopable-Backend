@@ -30,6 +30,7 @@ RENT_STATUS_CHOICES = [
 class Profile(models.Model):
     id = models.CharField(max_length=32, primary_key=True, unique=True)  # Firebase UID
     user = models.OneToOneField(User, on_delete=models.PROTECT, related_name='profile')
+    email = models.EmailField(max_length=254, null=True)
     name = models.CharField(max_length=32, null=True)
     lastname = models.CharField(max_length=32, null=True)
     type = models.CharField(max_length=3, choices=PROFILE_TYPE_CHOICES, default='STD')
