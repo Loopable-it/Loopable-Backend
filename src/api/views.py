@@ -26,6 +26,20 @@ class ProfileRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
         if self.request.method == 'PATCH':
             return ProfileSerializerUpdate
         return ProfileSerializer
+    
+
+# /users/<str:pk>/rents/
+class ProfileRentListAPIView(generics.ListAPIView):
+    serializer_class = RentSerializer
+    pagination_class = CustomPagination
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
+    filterset_fields = ['id', 'product', 'renter']
+    ordering_fields = ['start_time']
+    permission_classes = [ProfileRentsIfIsOwner]
+
+    def get_queryset(self):
+        renter_id = self.kwargs['pk']
+        return Rent.objects.filter(renter=renter_id).order_by('-start_time')
 
 
 # /product-categories/

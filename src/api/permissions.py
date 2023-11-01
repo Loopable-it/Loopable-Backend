@@ -16,3 +16,12 @@ class ProfileEditIfIsOwner(permissions.BasePermission):
             return True
 
         return False
+    
+    
+class ProfileRentsIfIsOwner(permissions.BasePermission):
+    def has_permission(self, request, view):
+        renter_id = view.kwargs.get('pk')
+        return request.user.is_authenticated and str(request.user.profile.id) == renter_id
+
+    def has_object_permission(self, request, view, obj):
+        return True
