@@ -6,7 +6,7 @@ from api.models import *
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = ('id', 'name', 'lastname', 'type', 'is_verified', 'image')
+        fields = ('id', 'email', 'name', 'lastname', 'type', 'is_verified', 'image')
 
 
 class ProfileSerializerUpdate(serializers.ModelSerializer):
