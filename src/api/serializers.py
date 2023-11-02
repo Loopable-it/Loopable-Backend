@@ -8,7 +8,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Profile
-        fields = ('id', 'email', 'name', 'lastname', 'type', 'is_verified', 'image')
+        fields = ('id', 'email', 'name', 'lastname', 'type', 'is_verified', 'is_active', 'image')
 
 
 class ProfileSerializerUpdate(serializers.ModelSerializer):
@@ -53,9 +53,18 @@ class ProductReviewsSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class RentSerializer(serializers.ModelSerializer):
+class RentCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Rent
         fields = '__all__'
-        read_only_fields = ('id', 'renter')
+        read_only_fields = ('id', 'renter', 'created_at', 'updated_at')
+
+
+class RentSerializer(serializers.ModelSerializer):
+    product = ProductSerializer(read_only=True)
+
+    class Meta:
+        model = Rent
+        fields = '__all__'
+        read_only_fields = ('id', 'renter', 'created_at', 'updated_at')

@@ -40,6 +40,14 @@ class UsersAPITests(APITestCase):
         profile.save()
 
         # Test filters
+        response = self.auth_client.get('/api/v1/users/', {'id': profile.id})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.json()), 1)
+
+        response = self.auth_client.get('/api/v1/users/', {'id': 'not-my-id'})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.json()), 0)
+
         response = self.auth_client.get('/api/v1/users/', {'name': 'Alex'})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.json()), 1)
@@ -52,7 +60,7 @@ class UsersAPITests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.json()), 1)
 
-        response = self.auth_client.get('/api/v1/users/', {'lastname': 'not-my-name'})
+        response = self.auth_client.get('/api/v1/users/', {'lastname': 'not-my-lastname'})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.json()), 0)
 
@@ -64,6 +72,10 @@ class UsersAPITests(APITestCase):
         response = self.auth_client.get('/api/v1/users/', {'search': 'vellons'})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.json()), 1)
+
+        response = self.auth_client.get('/api/v1/users/', {'search': 'this-not-exist'})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.json()), 0)
 
     def test_profile_detail(self):
         """
@@ -80,20 +92,17 @@ class UsersAPITests(APITestCase):
         """
         profile = Profile.objects.all()[0]
 
-        data = {'name': 'Alex', 'lastname': 'Vellons', 'type': 'BUS', 'is_verified': True}
+        data = {'name': 'Alex', 'lastname': 'Vellons', 'type': 'BUS', 'is_verified': True, 'allow_notifications': False}
         response = self.auth_client.patch('/api/v1/users/{}/'.format(profile.id), data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        resp_test = {
-            'id': profile.id,
-            'name': 'Alex',
-            'lastname': 'Vellons',
-            'type': 'STD',  # Not to update
-            'is_verified': False,  # Not to update
-            'sign_in_provider': 'password',
-            'fcm_token': None,
-            'allow_notifications': True,
-        }
-        assert response.json().items() >= resp_test.items()  # Check if all keys and values are in response
+        updated_profile = Profile.objects.all()[0]
+        self.assertEqual(updated_profile.name, 'Alex')
+        self.assertEqual(updated_profile.lastname, 'Vellons')
+        self.assertEqual(updated_profile.type, 'STD')  # Not to update
+        self.assertEqual(updated_profile.is_verified, False)  # Not to update
+        self.assertEqual(updated_profile.sign_in_provider, 'password')  # Not to update
+        self.assertEqual(updated_profile.fcm_token, None)
+        self.assertEqual(updated_profile.allow_notifications, False)
 
     def test_profile_update_permission(self):
         """
