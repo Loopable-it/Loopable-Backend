@@ -13,11 +13,11 @@ PROFILE_TYPE_CHOICES = [
 ]
 
 PAYMENT_METHOD_CHOICES = [
-     ('OPP', 'OnPlacePayment'),
-     ('CARD', 'Card'),
-     ('PAYPAL', 'PayPal'),
-     ('BANK', 'BankTransfer')
- ]
+    ('OPP', 'OnPlacePayment'),
+    ('CARD', 'Card'),
+    ('PAYPAL', 'PayPal'),
+    ('BANK', 'BankTransfer')
+]
 
 RENT_STATUS_CHOICES = [
     ('pending', 'Pending'),
@@ -34,6 +34,7 @@ class Profile(models.Model):
     lastname = models.CharField(max_length=32, null=True)
     type = models.CharField(max_length=3, choices=PROFILE_TYPE_CHOICES, default='STD')
     is_verified = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     sign_in_provider = models.CharField(max_length=32)
     province = models.CharField(max_length=64, null=True)
     is_complete = models.BooleanField(default=False)
@@ -59,6 +60,9 @@ def create_user_profile(sender, instance, created, **kwargs):
 class ProductCategory(models.Model):
     name = models.CharField(max_length=32, unique=True)
     description = models.CharField(max_length=512, null=True)
+
+    class Meta:
+        verbose_name_plural = 'Product categories'
 
     def __repr__(self):
         return '<Category {}>'.format(self.name)
@@ -109,6 +113,9 @@ class ProductReviews(models.Model):
     rating = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1), MaxValueValidator(5)])
     created_at = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        verbose_name_plural = 'Product reviews'
+
     def __repr__(self):
         return '<ProductReviews {} {}>'.format(self.id, self.content)
 
@@ -127,3 +134,9 @@ class Rent(models.Model):
     status = models.CharField(max_length=8, choices=RENT_STATUS_CHOICES, default='pending')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def __repr__(self):
+        return '<Rent {}>'.format(self.id)
+
+    def __str__(self):
+        return '{}'.format(self.id)
