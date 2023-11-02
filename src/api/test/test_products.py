@@ -32,6 +32,7 @@ class ProductsAPITests(APITestCase):
         """
         response = self.client.get('/api/v1/product-categories/')
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
         response = self.client.get('/api/v1/products/')
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
@@ -110,8 +111,8 @@ class ProductsAPITests(APITestCase):
         })
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Product.objects.count(), 5)
-        self.demo_db.p5 = Product.objects.get(name='Product 5')
-        self.assertEqual(self.demo_db.p5.owner.id, self.demo_db.profile1.id)  # Check if owner is taken from logged user
-        self.assertEqual(self.demo_db.p5.active, True)
-        self.assertEqual(self.demo_db.p5.stock_quantity, 1)
-        self.assertEqual(self.demo_db.p5.category.id, 3)
+        self.demo_db.p5c = Product.objects.get(name='Product 5')
+        self.assertEqual(self.demo_db.p5c.owner.id, self.demo_db.profile1.id)  # Check if owner is taken from logged
+        self.assertEqual(self.demo_db.p5c.active, True)
+        self.assertEqual(self.demo_db.p5c.stock_quantity, 1)
+        self.assertEqual(self.demo_db.p5c.category.id, 3)

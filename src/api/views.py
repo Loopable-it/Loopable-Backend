@@ -53,7 +53,7 @@ class ProductCategoryListAPIView(generics.ListAPIView):
 
 
 # /products/
-class ProductListAPIView(generics.ListCreateAPIView):
+class ProductListCreateAPIView(generics.ListCreateAPIView):
     queryset = Product.objects.prefetch_related('images').all().order_by('created_at')
     serializer_class = ProductSerializer
     pagination_class = CustomPagination
@@ -77,13 +77,9 @@ class ProductReviewsListCreateAPIView(generics.ListCreateAPIView):
 
 
 # /rents/
-class RentListCreateAPIView(generics.ListCreateAPIView):
-    queryset = Rent.objects.all().order_by('-start_time')
-    serializer_class = RentSerializer
-    pagination_class = CustomPagination
-    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
-    filterset_fields = ['id', 'renter', 'product', 'status']
-    ordering_fields = ['start_time']
+class RentCreateAPIView(generics.CreateAPIView):
+    queryset = Rent.objects.all().order_by('created_at')
+    serializer_class = RentCreateSerializer
 
     def perform_create(self, serializer):
         # Get owner from the request
