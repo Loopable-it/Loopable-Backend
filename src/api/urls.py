@@ -5,6 +5,7 @@ from api import views
 urlpatterns = [
     path('users/', views.ProfileListAPIView.as_view()),
     path('users/<str:pk>/', views.ProfileRetrieveUpdateAPIView.as_view()),
+    path('users/<str:pk>/rents/', views.ProfileRentListAPIView.as_view()),
     path('product-categories/', views.ProductCategoryListAPIView.as_view()),
     path('products/', views.ProductListAPIView.as_view()),
     path('reviews/', views.ProductReviewsListCreateAPIView.as_view()),
@@ -28,7 +29,7 @@ TODOOOOOOO:
 - [GET, POST] /rents/ (da creare i filtri product__owner=uid, renter=uid - deve essere sicuro) + TEST 
     visualizzazione + creazione noleggio -> da forzare stato creazione a "pending" 
         -> (Alex) poi mandare notifica con Firebase Cloud Messaging all'owner del prodotto che deve accettare o rifiutare
-- [GET] /users/<str:pk>/rents/ (only owner can view)
+- (FATTO) [GET] /users/<str:pk>/rents/ (only owner can view)
     visualizzazione dei prodotti di cui ho fatto richiesta di noleggio (renter=user_pk)
 
 - [GET] /products/<str:pk>/rents/ (only owner of product can view)
