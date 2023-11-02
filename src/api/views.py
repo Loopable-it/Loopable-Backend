@@ -7,12 +7,12 @@ from loopable.pagination import CustomPagination
 
 # /users/
 class ProfileListAPIView(generics.ListAPIView):
-    queryset = Profile.objects.exclude(type__in=['SYS']).order_by('created_at')
+    queryset = Profile.objects.exclude(type__in=['SYS']).prefetch_related('user').order_by('created_at')
     serializer_class = ProfileSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['id', 'name', 'lastname', 'type', 'is_verified']
+    filterset_fields = ['id', 'name', 'lastname', 'type', 'is_verified', 'is_active']
     search_fields = ['name', 'lastname']  # ?search=LIKE in all these fields
-    ordering_fields = ['name', 'lastname']  # ?ordering=-username
+    ordering_fields = ['name', 'lastname', 'created_at']  # ?ordering=-username
 
 
 # /users/<str:pk>/ (only owner of account can update)
@@ -33,13 +33,14 @@ class ProfileRentListAPIView(generics.ListAPIView):
     serializer_class = RentSerializer
     pagination_class = CustomPagination
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
-    filterset_fields = ['id', 'product', 'renter']
-    ordering_fields = ['start_time']
+    filterset_fields = ['id', 'product', 'status', 'payment_method']
+    ordering_fields = ['created_at', 'start_time', 'end_time']
     permission_classes = [ProfileRentsIfIsOwner]
 
     def get_queryset(self):
         renter_id = self.kwargs['pk']
-        return Rent.objects.filter(renter=renter_id).order_by('-start_time')
+        return (Rent.objects.prefetch_related('product').prefetch_related('product__images')
+                .filter(renter=renter_id).order_by('created_at'))
 
 
 # /product-categories/
