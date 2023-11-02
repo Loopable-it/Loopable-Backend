@@ -29,7 +29,7 @@ TODOOOOOOO:
 - [GET, POST] /rents/ (da creare i filtri product__owner=uid, renter=uid - deve essere sicuro) + TEST 
     visualizzazione + creazione noleggio -> da forzare stato creazione a "pending" 
         -> (Alex) poi mandare notifica con Firebase Cloud Messaging all'owner del prodotto che deve accettare o rifiutare
-- [GET] /users/<str:pk>/rents/ (only owner can view)
+- (FATTO) [GET] /users/<str:pk>/rents/ (only owner can view)
     visualizzazione dei prodotti di cui ho fatto richiesta di noleggio (renter=user_pk)
 
 - [GET] /products/<str:pk>/rents/ (only owner of product can view)
