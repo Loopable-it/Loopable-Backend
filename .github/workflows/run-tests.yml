@@ -41,6 +41,7 @@ jobs:
 
   execute_linter:
     name: Execute Python linter
+    environment: PRODUCTION_FIREBASE
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
