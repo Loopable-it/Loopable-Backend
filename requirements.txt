@@ -1,11 +1,11 @@
 asgiref==3.7.2
 coreapi==2.3.3
 coreschema==0.0.4
-Django==4.2.6
+Django==4.2.7
 django-health-check==3.17.0
 djangorestframework==3.14.0
-django_filter==23.2
-dj-database-url==2.0.0
+django_filter==23.3
+dj-database-url==2.1.0
 drf-yasg==1.21.7
 firebase_admin==6.2.0
 inflection==0.5.1
@@ -19,3 +19,5 @@ typing_extensions==4.7.1
 uritemplate==4.1.1
 gunicorn==21.2.0
 python-dotenv==1.0.0
+pylint==3.0.2
+pylint-django==2.5.5

@@ -9,6 +9,8 @@ LOOPABLE is a platform that promotes the circular economy and environmental sust
 ## Backend
 This is a Django Rest Framework project for https://loopable.it.
 
+Let's try to use [conventional commits](https://cheatography.com/albelop/cheat-sheets/conventional-commits/).
+
 ![backend diagram](.github/diagram.jpg "Backend diagram")
 
 ## Run the project
@@ -71,6 +73,17 @@ curl --location --request GET 'http://localhost:8000/api/v1/product-categories/'
 ```
 
 Take a look to the swagger here: http://localhost:8000/swagger/.
+
+## Pylint
+Pylint is a Python static code analysis tool that helps developers find and fix errors, 
+enforce coding style, and enhance code quality. It checks for issues, adheres to PEP 8 style 
+guidelines, and allows customization. Pylint is essential for maintaining clean, 
+error-free Python code.
+
+Run this command to check the code:
+```bash
+pylint --rcfile=pylintrc ./sr
+```
 
 ## Run the tests
 To run the tests, **make sure to have all the environment variables set in the `.env` file** and then 

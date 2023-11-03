@@ -38,3 +38,5 @@ jobs:
           FIREBASE_TEST_USER2_EMAIL: ${{ vars.FIREBASE_TEST_USER2_EMAIL }}
           FIREBASE_TEST_USER2_PWD: ${{ secrets.FIREBASE_TEST_USER2_PWD }}
         run: python src/manage.py test -v 2
+      - name: Running linter
+        run: pylint --rcfile=pylintrc ./src
