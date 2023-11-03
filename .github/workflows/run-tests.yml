@@ -38,5 +38,19 @@ jobs:
           FIREBASE_TEST_USER2_EMAIL: ${{ vars.FIREBASE_TEST_USER2_EMAIL }}
           FIREBASE_TEST_USER2_PWD: ${{ secrets.FIREBASE_TEST_USER2_PWD }}
         run: python src/manage.py test -v 2
+
+  execute_linter:
+    name: Execute Python linter
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python 3
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install requirements
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
       - name: Running linter
         run: pylint --rcfile=pylintrc ./src
