@@ -53,4 +53,8 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
       - name: Running linter
+        env:
+          DJANGO_DEBUG: ${{ vars.DJANGO_DEBUG }}
+          DJANGO_ENV: ${{ vars.DJANGO_ENV }}
+          DJANGO_SETTINGS_MODULE: 'none'
         run: pylint --rcfile=pylintrc ./src
