@@ -1,5 +1,5 @@
 import firebase_admin
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.utils import timezone
 from firebase_admin import auth
 from firebase_admin import credentials
@@ -25,8 +25,7 @@ class FirebaseAuthentication(authentication.BaseAuthentication):
         try:
             decoded_token = auth.verify_id_token(id_token)
         except Exception as e:
-            raise InvalidAuthToken()
-            pass
+            raise InvalidAuthToken() from e
 
         if not id_token or not decoded_token:
             raise NoAuthToken()
@@ -36,16 +35,16 @@ class FirebaseAuthentication(authentication.BaseAuthentication):
             uid = decoded_token.get('uid')
             email = decoded_token.get('email')
             sign_in_provider = decoded_token.get('firebase')['sign_in_provider']
-        except Exception:
-            raise FirebaseError()
+        except Exception as e:
+            raise FirebaseError() from e
 
-        user, created = User.objects.select_related('profile').get_or_create(username=uid)
+        user, created = get_user_model().objects.select_related('profile').get_or_create(username=uid)
         if not user.is_active:
             raise ForbiddenUser()
 
         # Update last login every 30 minutes
         if user.last_login and user.last_login < timezone.now() - timezone.timedelta(minutes=30) or user.email != email:
-            User.objects.filter(username=uid).update(last_login=timezone.localtime(), email=email)
+            get_user_model().objects.filter(username=uid).update(last_login=timezone.localtime(), email=email)
 
         if created:
             user.profile.sign_in_provider = sign_in_provider

@@ -25,7 +25,7 @@ if SECRET_KEY is None:
 
 ENVIRONMENT = os.getenv('DJANGO_ENV')
 if ENVIRONMENT not in ['LOCAL', 'PRODUCTION']:
-    raise EnvironmentError('Bad environment settings. Current env: {}. You need to set DJANGO_ENV'.format(ENVIRONMENT))
+    raise EnvironmentError(f'Bad environment settings. Current env: {ENVIRONMENT}. You need to set DJANGO_ENV')
 
 DEBUG = os.getenv('DJANGO_DEBUG', 'FALSE') == 'TRUE'
 
@@ -98,7 +98,7 @@ elif ENVIRONMENT == 'PRODUCTION':
     DATABASES = {}
     DB_CONF = dj_database_url.config(conn_max_age=600, ssl_require=True)  # From DATABASE_URL env var
     if len(DB_CONF) == 0:
-        raise EnvironmentError('Bad DB configuration. Current conf: {} You need to set DATABASE_URL'.format(DB_CONF))
+        raise EnvironmentError(f'Bad DB configuration. Current conf: {DB_CONF} You need to set DATABASE_URL')
     DATABASES['default'] = DB_CONF
 else:
     # Database for local development

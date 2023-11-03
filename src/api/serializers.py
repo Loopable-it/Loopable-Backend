@@ -1,11 +1,11 @@
 from rest_framework import serializers
 
-from api.models import *
+from api.models import Profile, ProductCategory, ProductImage, Product, ProductReviews, Rent
 
 
 class ProfileSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(source='user.email', read_only=True)
-    
+
     class Meta:
         model = Profile
         fields = ('id', 'email', 'name', 'lastname', 'type', 'is_verified', 'is_active', 'image')
@@ -54,7 +54,6 @@ class ProductReviewsSerializer(serializers.ModelSerializer):
 
 
 class RentCreateSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Rent
         fields = '__all__'

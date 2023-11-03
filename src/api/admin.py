@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from api.models import *
+from api.models import Profile, ProductCategory, Product, ProductImage, ProductReviews, Rent
 
 
 @admin.register(Profile)
