@@ -1,7 +1,9 @@
 from api.models import ProductCategory, Product, Rent
-from api.test.firebase_login import get_profile
+from api.test.firebase_login import FirebaseTestUsers
 
 
+# pylint: disable=too-few-public-methods
+# pylint: disable=too-many-instance-attributes
 class DemoDB:
     """
     This class is used to create a demo database for testing purposes.
@@ -9,8 +11,8 @@ class DemoDB:
     """
 
     def __init__(self):
-        self.profile1 = get_profile('USER1')
-        self.profile2 = get_profile('USER2')
+        self.profile1 = FirebaseTestUsers().get_profile('USER1')
+        self.profile2 = FirebaseTestUsers().get_profile('USER2')
 
         ProductCategory.objects.create(id=1, name='Category 1', description='Category 1 description')
         ProductCategory.objects.create(id=2, name='Category 2', description='Category 2 description')

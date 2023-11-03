@@ -1,30 +1,17 @@
-from django.contrib.auth.models import User
 from rest_framework import status
-from rest_framework.test import APITestCase
 
-from api.models import Profile, Rent
-from api.test.demo_db import DemoDB
-from api.test.firebase_login import get_test_user_client
+from api.models import Rent
+from api.test.api_test_case_base import APITestCaseBase
 
 
-class RentsAPITests(APITestCase):
+class RentsAPITests(APITestCaseBase):
 
     def setUp(self):
         """
         Setup and ensure we can create a new User and the demo db.
+        This method is called before each test.
         """
-        # Create users
-        self.auth_client = get_test_user_client('USER1')
-        response = self.auth_client.get('/api/v1/users/')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.auth_client2 = get_test_user_client('USER2')
-        response = self.auth_client2.get('/api/v1/users/')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(User.objects.count(), 2)
-        self.assertEqual(Profile.objects.count(), 2)
-
-        # Create categories and products
-        self.demo_db = DemoDB()
+        self.setup_test_users_and_db()  # This is from api_test_case_base.py
 
     def test_no_token(self):
         """

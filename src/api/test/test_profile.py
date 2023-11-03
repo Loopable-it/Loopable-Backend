@@ -1,22 +1,17 @@
-from django.contrib.auth.models import User
 from rest_framework import status
-from rest_framework.test import APITestCase
 
 from api.models import Profile
-from api.test.firebase_login import get_test_user_client
+from api.test.api_test_case_base import APITestCaseBase
 
 
-class UsersAPITests(APITestCase):
+class UsersAPITests(APITestCaseBase):
 
     def setUp(self):
         """
-        Setup and ensure we can create a new User and Profile object.
+        Setup and ensure we can create a new User and the demo db.
+        This method is called before each test.
         """
-        self.auth_client = get_test_user_client('USER1')
-        response = self.auth_client.get('/api/v1/users/')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(User.objects.count(), 1)
-        self.assertEqual(Profile.objects.count(), 1)
+        self.setup_test_users_and_db()  # This is from api_test_case_base.py
 
     def test_no_token(self):
         """
@@ -33,7 +28,7 @@ class UsersAPITests(APITestCase):
 
         response = self.auth_client.get('/api/v1/users/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.json()), 1)
+        self.assertEqual(len(response.json()), 2)
 
         profile.name = 'Alex'
         profile.lastname = 'Vellons'
@@ -110,7 +105,6 @@ class UsersAPITests(APITestCase):
         """
         profile = Profile.objects.all()[0]
 
-        self.auth_client2 = get_test_user_client('USER2')
         response = self.auth_client.get('/api/v1/users/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
