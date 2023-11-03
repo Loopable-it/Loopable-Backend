@@ -80,8 +80,8 @@ class Product(models.Model):
     category = models.ForeignKey(ProductCategory, on_delete=models.PROTECT, related_name='products_list')
     stock_quantity = models.PositiveIntegerField(default=1)
     active = models.BooleanField(default=True)
-    latitude = models.FloatField()  # TODO: use PostGIS
-    longitude = models.FloatField()  # TODO: use PostGIS
+    latitude = models.FloatField()  # TODOOO: use PostGIS
+    longitude = models.FloatField()  # TODOOO: use PostGIS
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
