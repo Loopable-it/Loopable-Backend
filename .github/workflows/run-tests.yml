@@ -56,5 +56,6 @@ jobs:
         env:
           DJANGO_DEBUG: ${{ vars.DJANGO_DEBUG }}
           DJANGO_ENV: ${{ vars.DJANGO_ENV }}
-          DJANGO_SETTINGS_MODULE: 'none'
+          DJANGO_SETTINGS_MODULE: ${{ vars.DJANGO_SETTINGS_MODULE }}
+          DJANGO_SECRET_KEY: 'none'
         run: pylint --rcfile=pylintrc ./src
