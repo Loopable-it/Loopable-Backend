@@ -82,7 +82,17 @@ error-free Python code.
 
 Run this command to check the code:
 ```bash
-pylint --rcfile=pylintrc ./sr
+pylint --rcfile=pylintrc ./src
+```
+
+## Code style
+Flake8 is a Python tool that performs code analysis by combining multiple tools (pycodestyle, pyflakes, and McCabe) 
+to check code quality, enforce coding standards, and identify errors, simplifying the process of code review 
+and enhancement.
+
+Run this command to check the code style:
+```bash
+flake8 src/ --config=flake8 --show-source --statistics
 ```
 
 ## Run the tests

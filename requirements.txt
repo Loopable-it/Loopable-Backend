@@ -21,3 +21,4 @@ gunicorn==21.2.0
 python-dotenv==1.0.0
 pylint==3.0.2
 pylint-django==2.5.5
+flake8==6.1.0
