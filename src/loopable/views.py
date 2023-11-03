@@ -11,14 +11,14 @@ class PingPongView(APIView):
         return Response({'ping': 'pong'})
 
 
-def custom404(request, exception=None):
+def custom404(request, exception=None):  # pylint: disable=unused-argument
     return JsonResponse({
         'status_code': 404,
         'detail': 'This endpoint does not exist'
     }, status=404)
 
 
-def custom500(request, exception=None):
+def custom500(request, exception=None):  # pylint: disable=unused-argument
     return JsonResponse({
         'status_code': 500,
         'detail': 'Mannaggia, we got 500 server error'

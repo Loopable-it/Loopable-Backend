@@ -8,7 +8,7 @@ urlpatterns = [
     path('users/<str:pk>/rents/', views.ProfileRentListAPIView.as_view()),
     path('product-categories/', views.ProductCategoryListAPIView.as_view()),
     path('products/', views.ProductListCreateAPIView.as_view()),
-    path('reviews/', views.ProductReviewsListCreateAPIView.as_view()),  # TODO: fix and test
+    path('reviews/', views.ProductReviewsListCreateAPIView.as_view()),  # TODOOO: fix and test
     path('rents/', views.RentCreateAPIView.as_view()),
 ]
 

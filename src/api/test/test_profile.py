@@ -78,7 +78,7 @@ class UsersAPITests(APITestCaseBase):
         """
         profile = Profile.objects.all()[0]
 
-        response = self.auth_client.get('/api/v1/users/{}/'.format(profile.id))
+        response = self.auth_client.get(f'/api/v1/users/{profile.id}/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_profile_update(self):
@@ -88,7 +88,7 @@ class UsersAPITests(APITestCaseBase):
         profile = Profile.objects.all()[0]
 
         data = {'name': 'Alex', 'lastname': 'Vellons', 'type': 'BUS', 'is_verified': True, 'allow_notifications': False}
-        response = self.auth_client.patch('/api/v1/users/{}/'.format(profile.id), data)
+        response = self.auth_client.patch(f'/api/v1/users/{profile.id}/', data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         updated_profile = Profile.objects.all()[0]
         self.assertEqual(updated_profile.name, 'Alex')
@@ -109,5 +109,5 @@ class UsersAPITests(APITestCaseBase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         data = {'name': 'Alex', 'lastname': 'Vellons'}
-        response = self.auth_client2.patch('/api/v1/users/{}/'.format(profile.id), data)  # USER2 try to update USER1
+        response = self.auth_client2.patch(f'/api/v1/users/{profile.id}/', data)  # USER2 try to update USER1
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)

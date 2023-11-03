@@ -1,7 +1,9 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, filters
-from api.permissions import *
-from api.serializers import *
+from api.models import Profile, ProductCategory, Rent, Product, ProductReviews
+from api.permissions import ProfileEditIfIsOwner, ProfileRentsIfIsOwner
+from api.serializers import ProfileSerializer, ProfileSerializerUpdate, ProductCategorySerializer, \
+    ProductSerializer, RentSerializer, RentCreateSerializer, ProductReviewsSerializer
 from loopable.pagination import CustomPagination
 
 
@@ -12,7 +14,7 @@ class ProfileListAPIView(generics.ListAPIView):
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['id', 'name', 'lastname', 'type', 'is_verified', 'is_active']
     search_fields = ['name', 'lastname']  # ?search=LIKE in all these fields
-    ordering_fields = ['name', 'lastname', 'created_at']  # ?ordering=-username
+    ordering_fields = ['name', 'lastname', 'created_at']  # ?ordering=-lastname
 
 
 # /users/<str:pk>/ (only owner of account can update)
@@ -26,7 +28,7 @@ class ProfileRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
         if self.request.method == 'PATCH':
             return ProfileSerializerUpdate
         return ProfileSerializer
-    
+
 
 # /users/<str:pk>/rents/
 class ProfileRentListAPIView(generics.ListAPIView):

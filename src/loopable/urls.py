@@ -23,7 +23,7 @@ from drf_yasg.views import get_schema_view
 
 from loopable.views import PingPongView, custom404, custom500
 
-schema_view = get_schema_view(
+SchemaView = get_schema_view(
     openapi.Info(
         title='Loopable API',
         default_version='v1',
@@ -49,10 +49,10 @@ urlpatterns = [
 
 if settings.DEBUG or settings.SWAGGER_ALLOWED:  # Swagger only if allowed
     urlpatterns.append(
-        re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
+        re_path(r'^swagger(?P<format>\.json|\.yaml)$', SchemaView.without_ui(cache_timeout=0), name='schema-json'),
     )
     urlpatterns.append(
-        re_path(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+        re_path(r'^swagger/$', SchemaView.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     )
     urlpatterns.append(
         re_path(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT}),

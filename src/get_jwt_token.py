@@ -1,5 +1,5 @@
-import requests
 import os
+import requests
 from dotenv import load_dotenv
 
 load_dotenv()  # Take environment variables from .env file.
@@ -10,13 +10,13 @@ FIREBASE_API_KEY = os.getenv('FIREBASE_API_KEY', None)  # Project settings > Gen
 
 
 def user_login(email, password):
-    url = '{}?key={}'.format(FIREBASE_USER_VERIFY_SERVICE, FIREBASE_API_KEY)
+    url = f'{FIREBASE_USER_VERIFY_SERVICE}?key={FIREBASE_API_KEY}'
     data = {
         'email': email,
         'password': password,
         'returnSecureToken': True
     }
-    result = requests.post(url, json=data)
+    result = requests.post(url, json=data, timeout=5)
     json_result = result.json()
     return json_result
 
@@ -32,13 +32,12 @@ if __name__ == '__main__':
     r = user_login(input_email, input_password)
     print(r)
     print()
-    print('localId: {}\n'.format(r['localId']))
-    print('refreshToken: {}\n'.format(r['refreshToken']))
-    print('idToken: {}'.format(r['idToken']))
+    print(f'localId: {r["localId"]}\n')
+    print(f'refreshToken: {r["refreshToken"]}\n')
+    print(f'idToken: {r["idToken"]}')
 
     """
     Now you cat make http request with 'Authorization' header that contains idToken
-    
     curl --location --request GET 'http://localhost:8000/api/v1/product-categories/' \
         --header 'Authorization: eyJhbGZ......'
     """
