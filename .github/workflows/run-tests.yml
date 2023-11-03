@@ -75,4 +75,4 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
       - name: Running linter
-        run: flake8 src/ --config=flake8 --show-source --statistics
+        run: flake8 src/ --config=flake8 --show-source --statistics  --benchmark
