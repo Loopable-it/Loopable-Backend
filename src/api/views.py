@@ -40,6 +40,9 @@ class ProfileRentListAPIView(generics.ListAPIView):
     permission_classes = [ProfileRentsIfIsOwner]
 
     def get_queryset(self):
+        if getattr(self, 'swagger_fake_view', False):
+            # Queryset just for swagger schema generation metadata
+            return Rent.objects.none()
         renter_id = self.kwargs['pk']
         return (Rent.objects.prefetch_related('product').prefetch_related('product__images')
                 .filter(renter=renter_id).order_by('created_at'))
