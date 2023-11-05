@@ -1,7 +1,7 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, filters
 from api.models import Profile, ProductCategory, Rent, Product, ProductReviews
-from api.permissions import ProfileEditIfIsOwner, ProfileRentsIfIsOwner
+from api.permissions import ProfileEditIfIsOwner, ProfileRentsIfIsOwner, ProductEditIfIsOwner
 from api.serializers import ProfileSerializer, ProfileSerializerUpdate, ProductCategorySerializer, \
     ProductSerializer, RentSerializer, RentCreateSerializer, ProductReviewsSerializer
 from loopable.pagination import CustomPagination
@@ -21,7 +21,6 @@ class ProfileListAPIView(generics.ListAPIView):
 class ProfileRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
     http_method_names = ['get', 'patch', 'options']
     queryset = Profile.objects.all()
-    serializer_class = ProfileSerializer
     permission_classes = [ProfileEditIfIsOwner]
 
     def get_serializer_class(self):
@@ -70,6 +69,14 @@ class ProductListCreateAPIView(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         # Get owner from the request
         serializer.save(owner=self.request.user.profile)
+
+
+# /products/<str:pk>/ (only owner of account can update)
+class ProductRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
+    http_method_names = ['get', 'patch', 'options']
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    permission_classes = [ProductEditIfIsOwner]
 
 
 # /reviews/

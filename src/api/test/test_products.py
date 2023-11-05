@@ -103,3 +103,36 @@ class ProductsAPITests(APITestCaseBase):
         self.assertEqual(self.demo_db.p5c.active, True)
         self.assertEqual(self.demo_db.p5c.stock_quantity, 1)
         self.assertEqual(self.demo_db.p5c.category.id, 3)
+
+    def test_product_update(self):
+        """
+        Ensure product update view works.
+        """
+        data = {
+            'name': 'Product prova',
+            'description': 'Product prova description',
+            'price': 40.00,
+            'category': 2,
+            'latitude': 50.0,
+            'longitude': 50.0,
+            'owner': '1234'
+        }
+
+        response = self.auth_client.patch(f'/api/v1/products/{self.demo_db.p1.id}/', data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        updated_product = Product.objects.get(id=self.demo_db.p1.id)
+        self.assertEqual(updated_product.name, 'Product prova')
+        self.assertEqual(updated_product.description, 'Product prova description')
+        self.assertEqual(updated_product.category.id, 2)
+        self.assertEqual(updated_product.price, 40.00)
+        self.assertEqual(updated_product.latitude, 50.0)
+        self.assertEqual(updated_product.longitude, 50.0)
+        self.assertEqual(updated_product.owner.id, self.demo_db.profile1.id)
+
+    def test_product_update_permission(self):
+        """
+        Ensure product update view works only for the owner.
+        """
+        data = {'name': 'Product prova', 'description': 'Product prova description'}
+        response = self.auth_client2.patch(f'/api/v1/products/{self.demo_db.p1.id}/', data)  # USER2 try to update USER1
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)

@@ -17,6 +17,22 @@ class ProfileEditIfIsOwner(permissions.BasePermission):
         return False
 
 
+class ProductEditIfIsOwner(permissions.BasePermission):
+    edit_methods = ('PUT', 'PATCH', 'DELETE')
+
+    def has_permission(self, request, view):
+        return request.user.is_authenticated is True
+
+    def has_object_permission(self, request, view, obj):
+        if request.method in self.edit_methods and obj.owner.id == request.user.profile.id:
+            return True
+
+        if request.method == 'GET':
+            return True
+
+        return False
+
+
 class ProfileRentsIfIsOwner(permissions.BasePermission):
     def has_permission(self, request, view):
         renter_id = view.kwargs.get('pk')
