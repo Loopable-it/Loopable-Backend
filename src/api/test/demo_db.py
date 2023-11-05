@@ -24,7 +24,7 @@ class DemoDB:
                                          owner=self.profile1, price=20.0, category_id=2, latitude=20.0, longitude=20.0)
         self.p3 = Product.objects.create(name='Product 3 XYZ', description='Product 3 desc',
                                          owner=self.profile2, price=30.0, category_id=2, latitude=30.0, longitude=30.0)
-        self.p4 = Product.objects.create(name='Product 4 not active', description='Product 3 desc', active=False,
+        self.p4 = Product.objects.create(name='Product 4 not active', description='Product 4 desc', active=False,
                                          owner=self.profile2, price=30.0, category_id=2, latitude=30.0, longitude=30.0)
 
         self.r1 = Rent.objects.create(product=self.p3, renter=self.profile1, price=10,
