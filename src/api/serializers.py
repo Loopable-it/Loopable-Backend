@@ -8,17 +8,18 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Profile
-        fields = ('id', 'email', 'name', 'lastname', 'type', 'is_verified', 'is_active', 'image')
+        fields = ('id', 'email', 'name', 'lastname', 'type', 'is_verified', 'is_active', 'sign_in_provider', 'province', 'is_complete', 'image', 'fcm_token', 'allow_notifications', 'created_at', 'updated_at')
 
 
 class ProfileSerializerUpdate(serializers.ModelSerializer):
+    email = serializers.EmailField(source='user.email', read_only=True)
     """
     This serializer show personal information of a user.
     """
 
     class Meta:
         model = Profile
-        read_only_fields = ('id', 'user', 'type', 'is_verified', 'sign_in_provider', 'created_at', 'updated_at')
+        read_only_fields = ('id', 'email', 'user', 'type', 'is_verified', 'sign_in_provider', 'created_at', 'updated_at')
         exclude = ('user',)
 
 
