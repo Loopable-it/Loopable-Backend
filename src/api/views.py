@@ -34,7 +34,7 @@ class ProfileRentListAPIView(generics.ListAPIView):
     serializer_class = RentSerializer
     pagination_class = CustomPagination
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
-    filterset_fields = ['id', 'product', 'status', 'payment_method']
+    filterset_fields = ['product', 'status', 'payment_method']
     ordering_fields = ['created_at', 'start_time', 'end_time']
     permission_classes = [ProfileRentsIfIsOwner]
 
