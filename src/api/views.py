@@ -24,7 +24,7 @@ class ProfileRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
     permission_classes = [ProfileEditIfIsOwner]
 
     def get_serializer_class(self):
-        if self.request.method == 'PATCH':
+        if self.request.method == 'PATCH' or self.kwargs['pk'] == str(self.request.user.profile.id):
             return ProfileSerializerUpdate
         return ProfileSerializer
 
