@@ -19,7 +19,7 @@ class ProfileSerializerUpdate(serializers.ModelSerializer):
 
     class Meta:
         model = Profile
-        read_only_fields = ('id', 'email', 'user', 'type', 'is_verified', 'sign_in_provider', 'created_at', 'updated_at')
+        read_only_fields = ('id', 'user', 'type', 'is_verified', 'sign_in_provider', 'created_at', 'updated_at')
         exclude = ('user',)
 
 
