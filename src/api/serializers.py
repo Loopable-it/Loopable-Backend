@@ -8,7 +8,12 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Profile
-        fields = ('id', 'email', 'name', 'lastname', 'type', 'is_verified', 'is_active', 'sign_in_provider', 'province', 'is_complete', 'image', 'fcm_token', 'allow_notifications', 'created_at', 'updated_at')
+        fields = (
+            'id', 'email', 'name', 'lastname', 'type', 'is_verified',
+            'is_active', 'sign_in_provider', 'province',
+            'is_complete', 'image', 'fcm_token', 'allow_notifications',
+            'created_at', 'updated_at'
+        )
 
 
 class ProfileSerializerUpdate(serializers.ModelSerializer):
