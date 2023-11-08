@@ -74,12 +74,19 @@ class UsersAPITests(APITestCaseBase):
 
     def test_profile_detail(self):
         """
-        Ensure profile detail view works.
+        Ensure profile detail view works and fcm_token.
         """
         profile = Profile.objects.all()[0]
 
         response = self.auth_client.get(f'/api/v1/users/{profile.id}/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        details_profile = Profile.objects.all()[0]
+        self.assertEqual(details_profile.fcm_token, profile.fcm_token)
+
+        response = self.auth_client2.get(f'/api/v1/users/{profile.id}/')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        details_profile = Profile.objects.all()[0]
+        self.assertEqual(details_profile.fcm_token, None)
 
     def test_profile_update(self):
         """
