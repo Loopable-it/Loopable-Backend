@@ -20,11 +20,17 @@ class UsersAPITests(APITestCaseBase):
         response = self.client.get('/api/v1/users/')
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
+        response = self.client.get(f'/api/v1/users/{self.demo_db.profile1.id}/')
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+        response = self.client.patch(f'/api/v1/users/{self.demo_db.profile1.id}/', {})
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
     def test_profile_list(self):
         """
         Ensure profile list view works.
         """
-        profile = Profile.objects.all()[0]
+        profile = Profile.objects.get(id=self.demo_db.profile1.id)
 
         response = self.auth_client.get('/api/v1/users/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -76,21 +82,17 @@ class UsersAPITests(APITestCaseBase):
         """
         Ensure profile detail view works.
         """
-        profile = Profile.objects.all()[0]
-
-        response = self.auth_client.get(f'/api/v1/users/{profile.id}/')
+        response = self.auth_client.get(f'/api/v1/users/{self.demo_db.profile1.id}/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_profile_update(self):
         """
         Ensure profile update view works.
         """
-        profile = Profile.objects.all()[0]
-
         data = {'name': 'Alex', 'lastname': 'Vellons', 'type': 'BUS', 'is_verified': True, 'allow_notifications': False}
-        response = self.auth_client.patch(f'/api/v1/users/{profile.id}/', data)
+        response = self.auth_client.patch(f'/api/v1/users/{self.demo_db.profile1.id}/', data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        updated_profile = Profile.objects.all()[0]
+        updated_profile = Profile.objects.get(id=self.demo_db.profile1.id)
         self.assertEqual(updated_profile.name, 'Alex')
         self.assertEqual(updated_profile.lastname, 'Vellons')
         self.assertEqual(updated_profile.type, 'STD')  # Not to update
@@ -103,11 +105,9 @@ class UsersAPITests(APITestCaseBase):
         """
         Ensure profile update view works only for the owner.
         """
-        profile = Profile.objects.all()[0]
-
         response = self.auth_client.get('/api/v1/users/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         data = {'name': 'Alex', 'lastname': 'Vellons'}
-        response = self.auth_client2.patch(f'/api/v1/users/{profile.id}/', data)  # USER2 try to update USER1
+        response = self.auth_client2.patch(f'/api/v1/users/{self.demo_db.profile1.id}/', data)  # USER2 try update USER1
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
