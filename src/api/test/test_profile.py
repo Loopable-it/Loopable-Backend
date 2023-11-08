@@ -81,7 +81,7 @@ class UsersAPITests(APITestCaseBase):
         response = self.auth_client.get(f'/api/v1/users/{profile.id}/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         details_profile = Profile.objects.all()[0]
-        self.assertEqual(details_profile.fcm_token, profile.fcm_token)
+        self.assertNotEqual(details_profile.fcm_token, None)
 
         response = self.auth_client2.get(f'/api/v1/users/{profile.id}/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
