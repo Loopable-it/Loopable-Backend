@@ -38,6 +38,9 @@ class RentsAPITests(APITestCaseBase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.json()['results']), 2)
 
+        response = self.auth_client.get('/api/v1/rents/')
+        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+
     def test_rent_create(self):
         """
         Ensure rent create view works.
@@ -50,6 +53,8 @@ class RentsAPITests(APITestCaseBase):
             'product': self.demo_db.p3.id,
             'start_time': '2023-12-01T00:00:00Z',
             'end_time': '2023-12-02T00:00:00Z',
+            'payment_method': 'PAYPAL',  # This is ignored
+            'status': 'accepted',  # This is ignored
             'price': 40.00
         })
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
