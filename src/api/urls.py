@@ -22,7 +22,7 @@ TODOOOOOOO:
 - [DELETE] /products/<str:pk>/images/<str:pk>/ (only owner of product can delete)
     cancellazione immagine del prodotto a db (come viene cancellata l'immagine dal server?)
 
-- [POST] /rents/
+- [POST] /rents/ -> email
     -> (Alex) poi mandare notifica con Firebase Cloud Messaging all'owner del prodotto che deve accettare o rifiutare
 
 - [GET] /products/<id>/rents/ (only owner of PRODUCT can view) [product__owner]  # user is the owner
@@ -31,10 +31,10 @@ TODOOOOOOO:
 - [GET] /users/<id>/products/rents/ (only owner of PRODUCT can view) [product__owner]  # user is the owner
     owner può vedere i noleggi del suo prodotto
 
-
-
 - creare modello Business
-- servizio per approvare o rifiutare noleggio (solo owner del prodotto)
-- servizio per cancellare il noleggio (solo owner del rent)
-- rivedere servizio reviews (solo chi ha noleggiato il prodotto può lasciare una recensione)
+
+- /rents/<id>/
+    - servizio per approvare o rifiutare noleggio (solo owner del prodotto)
+    - servizio per cancellare il noleggio (solo owner del rent)
+    - rivedere servizio reviews (solo chi ha noleggiato il prodotto può lasciare una recensione)
 """

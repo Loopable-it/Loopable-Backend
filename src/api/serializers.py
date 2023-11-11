@@ -58,7 +58,7 @@ class RentCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Rent
         fields = '__all__'
-        read_only_fields = ('id', 'renter', 'created_at', 'updated_at')
+        read_only_fields = ('id', 'renter', 'status', 'payment_method', 'created_at', 'updated_at')
 
 
 class RentSerializer(serializers.ModelSerializer):
