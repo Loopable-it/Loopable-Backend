@@ -15,6 +15,7 @@ class ProfileSerializerUpdate(serializers.ModelSerializer):
     """
     This serializer show personal information of a user.
     """
+    email = serializers.EmailField(source='user.email', read_only=True)
 
     class Meta:
         model = Profile
@@ -57,7 +58,7 @@ class RentCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Rent
         fields = '__all__'
-        read_only_fields = ('id', 'renter', 'created_at', 'updated_at')
+        read_only_fields = ('id', 'renter', 'status', 'payment_method', 'created_at', 'updated_at')
 
 
 class RentSerializer(serializers.ModelSerializer):

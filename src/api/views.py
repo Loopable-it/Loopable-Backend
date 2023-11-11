@@ -24,7 +24,7 @@ class ProfileRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
     permission_classes = [ProfileEditIfIsOwner]
 
     def get_serializer_class(self):
-        if self.request.method == 'PATCH':
+        if self.request.method == 'PATCH' or self.kwargs['pk'] == self.request.user.username:
             return ProfileSerializerUpdate
         return ProfileSerializer
 
@@ -68,7 +68,7 @@ class ProductListCreateAPIView(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         # Get owner from the request
-        serializer.save(owner=self.request.user.profile)
+        serializer.save(owner_id=self.request.user.username)
 
 
 # /products/<str:pk>/ (only owner of account can update)
@@ -95,4 +95,4 @@ class RentCreateAPIView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         # Get owner from the request
-        serializer.save(renter=self.request.user.profile, status='pending', payment_method='OPP')
+        serializer.save(renter_id=self.request.user.username, status='pending', payment_method='OPP')

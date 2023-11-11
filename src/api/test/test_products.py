@@ -95,6 +95,7 @@ class ProductsAPITests(APITestCaseBase):
             'category': 3,
             'latitude': 40.0,
             'longitude': 40.0,
+            'owner': '1234'  # This is ignored
         })
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Product.objects.count(), 5)
@@ -115,7 +116,7 @@ class ProductsAPITests(APITestCaseBase):
             'category': 2,
             'latitude': 50.0,
             'longitude': 50.0,
-            'owner': '1234'
+            'owner': '1234'  # This is ignored
         }
 
         response = self.auth_client.patch(f'/api/v1/products/{self.demo_db.p1.id}/', data)
