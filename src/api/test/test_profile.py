@@ -81,9 +81,35 @@ class UsersAPITests(APITestCaseBase):
     def test_profile_detail(self):
         """
         Ensure profile detail view works.
+        Same user can see all fields, other users can see only public fields.
         """
         response = self.auth_client.get(f'/api/v1/users/{self.demo_db.profile1.id}/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertContains(response, 'email', status_code=200)
+        self.assertContains(response, 'name', status_code=200)
+        self.assertContains(response, 'lastname', status_code=200)
+        self.assertContains(response, 'type', status_code=200)
+        self.assertContains(response, 'is_verified', status_code=200)
+        self.assertContains(response, 'is_active', status_code=200)
+        self.assertContains(response, 'sign_in_provider', status_code=200)
+        self.assertContains(response, 'is_complete', status_code=200)
+        self.assertContains(response, 'image', status_code=200)
+        self.assertContains(response, 'fcm_token', status_code=200)
+        self.assertContains(response, 'allow_notifications', status_code=200)
+
+        response = self.auth_client2.get(f'/api/v1/users/{self.demo_db.profile1.id}/')  # USER2 try get USER1
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertContains(response, 'email', status_code=200)
+        self.assertContains(response, 'name', status_code=200)
+        self.assertContains(response, 'lastname', status_code=200)
+        self.assertContains(response, 'type', status_code=200)
+        self.assertContains(response, 'is_verified', status_code=200)
+        self.assertContains(response, 'is_active', status_code=200)
+        self.assertNotContains(response, 'sign_in_provider', status_code=200)
+        self.assertNotContains(response, 'is_complete', status_code=200)
+        self.assertContains(response, 'image', status_code=200)
+        self.assertNotContains(response, 'fcm_token', status_code=200)
+        self.assertNotContains(response, 'allow_notifications', status_code=200)
 
     def test_profile_update(self):
         """

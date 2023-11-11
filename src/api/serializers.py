@@ -12,10 +12,10 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 
 class ProfileSerializerUpdate(serializers.ModelSerializer):
-    email = serializers.EmailField(source='user.email', read_only=True)
     """
     This serializer show personal information of a user.
     """
+    email = serializers.EmailField(source='user.email', read_only=True)
 
     class Meta:
         model = Profile
