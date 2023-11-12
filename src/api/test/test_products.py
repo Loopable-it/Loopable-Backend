@@ -130,6 +130,14 @@ class ProductsAPITests(APITestCaseBase):
         self.assertEqual(updated_product.longitude, 50.0)
         self.assertEqual(updated_product.owner.id, self.demo_db.profile1.id)
 
+    def test_product_retrieve(self):
+        response = self.auth_client.get('/api/v1/products/1234/')
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        response = self.auth_client.get(f'/api/v1/products/{self.demo_db.p1.id}/')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        response = self.auth_client2.get(f'/api/v1/products/{self.demo_db.p1.id}/')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
     def test_product_update_permission(self):
         """
         Ensure product update view works only for the owner.
