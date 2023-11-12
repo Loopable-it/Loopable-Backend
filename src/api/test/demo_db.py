@@ -1,4 +1,4 @@
-from api.models import ProductCategory, Product, Rent
+from api.models import ProductCategory, Product, Rent, ProductImage
 from api.test.firebase_login import FirebaseTestUsers
 
 
@@ -26,6 +26,11 @@ class DemoDB:
                                          owner=self.profile2, price=30.0, category_id=2, latitude=30.0, longitude=30.0)
         self.p4 = Product.objects.create(name='Product 4 not active', description='Product 4 desc', active=False,
                                          owner=self.profile2, price=30.0, category_id=2, latitude=30.0, longitude=30.0)
+
+        self.pi1 = ProductImage.objects.create(product=self.p1, image='test1.jpg')
+        self.pi2 = ProductImage.objects.create(product=self.p1, image='test2.jpg')
+        self.pi3 = ProductImage.objects.create(product=self.p1, image='test3.jpg')
+        self.pi4 = ProductImage.objects.create(product=self.p2, image='test4.jpg')
 
         self.r1 = Rent.objects.create(product=self.p3, renter=self.profile1, price=10,
                                       start_time='2023-11-01 00:00:00Z', end_time='2023-11-02 00:00:00Z')

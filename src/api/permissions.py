@@ -1,4 +1,7 @@
 from rest_framework import permissions
+from rest_framework.generics import get_object_or_404
+
+from api.models import Product
 
 
 class ProfileEditIfIsOwner(permissions.BasePermission):
@@ -31,6 +34,17 @@ class ProductEditIfIsOwner(permissions.BasePermission):
             return True
 
         return False
+
+
+class ProductImageEditIfIsOwner(permissions.BasePermission):
+    edit_methods = ('POST', 'DELETE')
+
+    def has_permission(self, request, view):
+        product = get_object_or_404(Product, id=view.kwargs.get('pk'))
+        return product.owner_id == request.user.username
+
+    def has_object_permission(self, request, view, obj):
+        return True
 
 
 class ProfileRentsIfIsOwner(permissions.BasePermission):
