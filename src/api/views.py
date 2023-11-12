@@ -24,6 +24,11 @@ class ProfileRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
     permission_classes = [ProfileEditIfIsOwner]
 
     def get_serializer_class(self):
+        if getattr(self, 'swagger_fake_view', False):
+            # Serializer just for swagger schema generation metadata
+            if self.request.method == 'PATCH':
+                return ProfileSerializerUpdate
+            return ProfileSerializer
         if self.request.method == 'PATCH' or self.kwargs['pk'] == self.request.user.username:
             return ProfileSerializerUpdate
         return ProfileSerializer

@@ -48,7 +48,7 @@ python src/manage.py migrate  # This will apply migrations to the database
 Doing this will create tables in the local database.
 
 ### Use the API
-APIs autentication is performed using [JWT tokens](https://en.wikipedia.org/wiki/JSON_Web_Token).
+APIs authentication is performed using [JWT tokens](https://en.wikipedia.org/wiki/JSON_Web_Token).
 
 We use Google Firebase to authenticate users. 
 Every user has a unique `uid` that is used to identify them.
@@ -72,7 +72,8 @@ curl --location --request GET 'http://localhost:8000/api/v1/product-categories/'
         --header 'Authorization: eyJhbGZ......'
 ```
 
-Take a look to the swagger here: http://localhost:8000/swagger/.
+Take a look to the swagger here: http://localhost:8000/api/v1/swagger/.
+In alternative, you can use the redoc here: http://localhost:8000/api/v1/redoc/.
 
 ## Pylint
 Pylint is a Python static code analysis tool that helps developers find and fix errors, 
@@ -86,7 +87,7 @@ pylint --rcfile=pylintrc ./src
 ```
 
 ## Code style
-Flake8 is a Python tool that performs code analysis by combining multiple tools (pycodestyle, pyflakes, and McCabe) 
+Flake8 is a Python tool that performs code analysis by combining multiple tools
 to check code quality, enforce coding standards, and identify errors, simplifying the process of code review 
 and enhancement.
 

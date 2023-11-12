@@ -55,6 +55,7 @@ class RentsAPITests(APITestCaseBase):
             'end_time': '2023-12-02T00:00:00Z',
             'payment_method': 'PAYPAL',  # This is ignored
             'status': 'accepted',  # This is ignored
+            'renter': '1234',  # This is ignored
             'price': 40.00
         })
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)

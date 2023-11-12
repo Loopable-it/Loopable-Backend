@@ -84,8 +84,6 @@ WSGI_APPLICATION = 'loopable.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-# Database
-# https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 if 'test' in sys.argv:
     # Database for test coverage
     DATABASES = {
@@ -176,6 +174,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'firebase_utility.authentication.FirebaseAuthentication',  # DO NOT REMOVE!! NEVER!
     ],
+    'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.NamespaceVersioning',
     'TEST_REQUEST_DEFAULT_FORMAT': 'json',
 }
 

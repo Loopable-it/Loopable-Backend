@@ -1,6 +1,10 @@
-from django.urls import path
+from django.conf import settings
+from django.urls import path, re_path
 
 from api import views
+from loopable.urls import SchemaViewSwagger
+
+app_name = 'api_v1'
 
 urlpatterns = [
     path('users/', views.ProfileListAPIView.as_view()),
@@ -38,3 +42,14 @@ TODOOOOOOO:
     - servizio per cancellare il noleggio (solo owner del rent)
     - rivedere servizio reviews (solo chi ha noleggiato il prodotto può lasciare una recensione)
 """
+
+if settings.DEBUG or settings.SWAGGER_ALLOWED:  # Docs only if allowed
+    urlpatterns.append(
+        re_path(r'^swagger(?P<format>\.json|\.yaml)$', SchemaViewSwagger.without_ui(cache_timeout=0), name='schema-j'),
+    )
+    urlpatterns.append(
+        re_path(r'^swagger/$', SchemaViewSwagger.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    )
+    urlpatterns.append(
+        re_path(r'^redoc/$', SchemaViewSwagger.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+    )
