@@ -13,6 +13,8 @@ urlpatterns = [
     path('product-categories/', views.ProductCategoryListAPIView.as_view()),
     path('products/', views.ProductListCreateAPIView.as_view()),
     path('products/<str:pk>/', views.ProductRetrieveUpdateAPIView.as_view()),
+    path('products/<str:pk>/images/', views.ProductImageCreateAPIView.as_view()),
+    path('products/<str:pk>/images/<str:id_img>/', views.ProductImageDestroyAPIView.as_view()),
     path('reviews/', views.ProductReviewsListCreateAPIView.as_view()),  # TODOOO: fix and test
     path('rents/', views.RentCreateAPIView.as_view()),
 ]
@@ -20,11 +22,6 @@ urlpatterns = [
 
 """
 TODOOOOOOO:
-
-- [GET, POST] /products/<str:pk>/images/ (only owner of product can create)
-    visualizzazione e caricamento immagini del prodotto
-- [DELETE] /products/<str:pk>/images/<str:pk>/ (only owner of product can delete)
-    cancellazione immagine del prodotto a db (come viene cancellata l'immagine dal server?)
 
 - [POST] /rents/ -> email
     -> (Alex) poi mandare notifica con Firebase Cloud Messaging all'owner del prodotto che deve accettare o rifiutare

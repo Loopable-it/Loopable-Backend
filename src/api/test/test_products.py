@@ -1,6 +1,6 @@
 from rest_framework import status
 
-from api.models import Product
+from api.models import Product, ProductImage
 from api.test.api_test_case_base import APITestCaseBase
 
 
@@ -137,3 +137,53 @@ class ProductsAPITests(APITestCaseBase):
         data = {'name': 'Product prova', 'description': 'Product prova description'}
         response = self.auth_client2.patch(f'/api/v1/products/{self.demo_db.p1.id}/', data)  # USER2 try to update USER1
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_product_image_create(self):
+        """
+        Ensure product image create view works.
+        """
+        response = self.auth_client.post(f'/api/v1/products/{self.demo_db.p1.id}/images/', {})
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+        response = self.auth_client.post('/api/v1/products/1234/images/', {})  # Fake Id
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+        response = self.auth_client2.post(f'/api/v1/products/{self.demo_db.p1.id}/images/', {
+            'image': 'test_new_image.jpg'
+        })
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+        # owner is taken from logged user (jwt token)
+        response = self.auth_client.post(f'/api/v1/products/{self.demo_db.p1.id}/images/', {
+            'image': 'test_new_image.jpg'
+        })
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(ProductImage.objects.count(), 5)
+        product_image = ProductImage.objects.get(id=response.json()['id'])
+        self.assertEqual(product_image.product_id, self.demo_db.p1.id)
+        self.assertEqual(product_image.image, 'test_new_image.jpg')
+
+    def test_product_image_delete(self):
+        """
+        Ensure product image delete view works.
+        """
+        response = self.auth_client.delete(f'/api/v1/products/{self.demo_db.p1.id}/images/1234/')  # fake image id
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+        response = self.auth_client.post(f'/api/v1/products/{self.demo_db.p1.id}/images/', {
+            'image': 'test_new_image.jpg'
+        })
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        product_image = ProductImage.objects.get(id=response.json()['id'])
+        self.assertEqual(ProductImage.objects.count(), 5)
+
+        response = self.auth_client.delete(f'/api/v1/products/1234/images/{product_image.id}/')  # fake product id
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+        response = self.auth_client2.delete(f'/api/v1/products/{self.demo_db.p1.id}/images/{product_image.id}/')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+        response = self.auth_client.delete(f'/api/v1/products/{self.demo_db.p1.id}/images/{product_image.id}/')
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+        self.assertEqual(ProductImage.objects.count(), 4)

@@ -33,6 +33,7 @@ class ProductImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductImage
         fields = '__all__'
+        read_only_fields = ('product',)
 
 
 class ProductSerializer(serializers.ModelSerializer):

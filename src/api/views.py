@@ -1,9 +1,11 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, filters
-from api.models import Profile, ProductCategory, Rent, Product, ProductReviews
-from api.permissions import ProfileEditIfIsOwner, ProfileRentsIfIsOwner, ProductEditIfIsOwner
+from rest_framework.generics import get_object_or_404
+
+from api.models import Profile, ProductCategory, Rent, Product, ProductReviews, ProductImage
+from api.permissions import ProfileEditIfIsOwner, ProfileRentsIfIsOwner, ProductEditIfIsOwner, ProductImageEditIfIsOwner
 from api.serializers import ProfileSerializer, ProfileSerializerUpdate, ProductCategorySerializer, \
-    ProductSerializer, RentSerializer, RentCreateSerializer, ProductReviewsSerializer
+    ProductSerializer, RentSerializer, RentCreateSerializer, ProductReviewsSerializer, ProductImageSerializer
 from loopable.pagination import CustomPagination
 
 
@@ -82,6 +84,27 @@ class ProductRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     permission_classes = [ProductEditIfIsOwner]
+
+
+# /products/<str:pk>/images/ (only owner of product can create)
+class ProductImageCreateAPIView(generics.CreateAPIView):
+    queryset = ProductImage.objects.all().order_by('created_at')
+    serializer_class = ProductImageSerializer
+    permission_classes = [ProductImageEditIfIsOwner]
+
+    def perform_create(self, serializer):
+        # Get product from the request
+        serializer.save(product_id=self.kwargs['pk'])
+
+
+# /products/<str:pk>/images/<str:id_img>/ (only owner of product can delete)
+class ProductImageDestroyAPIView(generics.DestroyAPIView):
+    queryset = ProductImage.objects.all()
+    serializer_class = ProductImageSerializer
+    permission_classes = [ProductImageEditIfIsOwner]
+
+    def get_object(self):
+        return get_object_or_404(ProductImage, id=self.kwargs.get('id_img'))
 
 
 # /reviews/
