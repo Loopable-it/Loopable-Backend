@@ -13,9 +13,10 @@ urlpatterns = [
     path('product-categories/', views.ProductCategoryListAPIView.as_view()),
     path('products/', views.ProductListCreateAPIView.as_view()),
     path('products/<str:pk>/', views.ProductRetrieveUpdateAPIView.as_view()),
+    # path('products/<str:pk>/reviews/', ),
     path('products/<str:pk>/images/', views.ProductImageCreateAPIView.as_view()),
     path('products/<str:pk>/images/<str:id_img>/', views.ProductImageDestroyAPIView.as_view()),
-    path('reviews/', views.ProductReviewsListCreateAPIView.as_view()),  # TODOOO: fix and test
+    path('reviews/', views.ProductReviewsListCreateAPIView.as_view()),  # TODOOO: fix and test e filtri per utente
     path('rents/', views.RentCreateAPIView.as_view()),
 ]
 
@@ -25,9 +26,6 @@ TODOOOOOOO:
 
 - [POST] /rents/ -> email
     -> (Alex) poi mandare notifica con Firebase Cloud Messaging all'owner del prodotto che deve accettare o rifiutare
-
-- [GET] /products/<id>/rents/ (only owner of PRODUCT can view) [product__owner]  # user is the owner
-    owner può vedere i noleggi del suo prodotto
 
 - [GET] /users/<id>/products/rents/ (only owner of PRODUCT can view) [product__owner]  # user is the owner
     owner può vedere i noleggi del suo prodotto
