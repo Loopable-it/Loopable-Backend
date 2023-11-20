@@ -22,10 +22,14 @@ class APITestCaseBase(APITestCase):
         # Create users
         self.auth_client = FirebaseTestUsers().get_test_user_client('USER1')
         response = self.auth_client.get('/api/v1/users/')
+        if response.status_code != 200:
+            print(response.json())
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         self.auth_client2 = FirebaseTestUsers().get_test_user_client('USER2')
         response = self.auth_client2.get('/api/v1/users/')
+        if response.status_code != 200:
+            print(response.json())
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         self.assertEqual(get_user_model().objects.count(), 2)

@@ -1,6 +1,7 @@
 import os
 
 import requests
+import rest_framework
 from django.conf import settings
 from rest_framework.test import APIClient
 
@@ -52,6 +53,7 @@ class FirebaseTestUsers(metaclass=Singleton):
             client = APIClient()
             client.credentials(HTTP_AUTHORIZATION=jwt)
             self.users[username] = client
+        assert isinstance(self.users[username], rest_framework.test.APIClient), 'APIClient not initialized correctly'
         return self.users[username]
 
     @staticmethod
