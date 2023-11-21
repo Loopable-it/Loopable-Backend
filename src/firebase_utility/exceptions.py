@@ -8,6 +8,12 @@ class NoAuthToken(APIException):
     default_code = 'no_auth_token'
 
 
+class BrokenAuthToken(APIException):
+    status_code = status.HTTP_401_UNAUTHORIZED
+    default_detail = 'Broken authentication token provided'
+    default_code = 'invalid_token'
+
+
 class InvalidAuthToken(APIException):
     status_code = status.HTTP_401_UNAUTHORIZED
     default_detail = 'Invalid authentication token provided'

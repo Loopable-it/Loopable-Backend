@@ -5,11 +5,8 @@ from firebase_admin import auth
 from firebase_admin import credentials
 from rest_framework import authentication
 
+from firebase_utility.exceptions import NoAuthToken, BrokenAuthToken, InvalidAuthToken, FirebaseError, ForbiddenUser
 from loopable import settings
-from .exceptions import FirebaseError
-from .exceptions import InvalidAuthToken
-from .exceptions import NoAuthToken
-from .exceptions import ForbiddenUser
 
 credential = credentials.Certificate(settings.FIREBASE_CREDENTIAL)
 default_app = firebase_admin.initialize_app(credential)
@@ -23,12 +20,14 @@ class FirebaseAuthentication(authentication.BaseAuthentication):
 
         id_token = auth_header.split(' ').pop()
         try:
-            decoded_token = auth.verify_id_token(id_token)
-        except Exception as e:
-            raise InvalidAuthToken() from e
+            decoded_token = auth.verify_id_token(id_token, clock_skew_seconds=20)
+        except Exception as e:  # pylint: disable=broad-except
+            if str(e).startswith('Token used too early'):
+                print(f'warning: {e}')
+            raise BrokenAuthToken() from e
 
         if not id_token or not decoded_token:
-            raise NoAuthToken()
+            raise InvalidAuthToken()
         # print('decoded_token {}'.format(decoded_token))
 
         try:
