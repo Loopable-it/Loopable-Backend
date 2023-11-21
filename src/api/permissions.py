@@ -1,7 +1,7 @@
 from rest_framework import permissions
 from rest_framework.generics import get_object_or_404
 
-from api.models import Product
+from api.models import Product, Rent
 
 
 class ProfileEditIfIsOwner(permissions.BasePermission):
@@ -54,3 +54,21 @@ class ProfileRentsIfIsOwner(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):
         return True
+
+
+class ReviewsIfIsRenter(permissions.BasePermission):
+    edit_methods = ('POST', 'GET')
+
+    def __init__(self):
+        self.message = None
+
+    def has_permission(self, request, view):
+        if request.method == 'GET':
+            return True
+
+        count_prent = Rent.objects.filter(renter_id=request.data['owner'], product_id=request.data['product']).count()
+        if count_prent > 0:
+            return True
+
+        self.message = 'You can\'t review this product'
+        return False
