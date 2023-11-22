@@ -1,4 +1,4 @@
-from api.models import ProductCategory, Product, Rent, ProductImage
+from api.models import ProductCategory, Product, Rent, ProductImage, ProductReviews
 from api.test.firebase_login import FirebaseTestUsers
 
 
@@ -38,3 +38,16 @@ class DemoDB:
                                       start_time='2023-11-03 00:00:00Z', end_time='2023-11-04 00:00:00Z')
         self.r3 = Rent.objects.create(product=self.p1, renter=self.profile2, price=10,
                                       start_time='2023-11-05 00:00:00Z', end_time='2023-11-06 00:00:00Z')
+
+        self.review1 = ProductReviews.objects.create(product=self.p1, created_by=self.profile1,
+                                                     content='test comment1', rating=5,
+                                                     created_at='2023-11-06 00:00:00Z')
+        self.review2 = ProductReviews.objects.create(product=self.p1, created_by=self.profile2,
+                                                     content='test comment2', rating=3,
+                                                     created_at='2023-11-06 00:00:00Z')
+        self.review3 = ProductReviews.objects.create(product=self.p3, created_by=self.profile1,
+                                                     content='test comment3', rating=5,
+                                                     created_at='2023-11-06 00:00:00Z')
+        self.review4 = ProductReviews.objects.create(product=self.p3, created_by=self.profile2,
+                                                     content='test comment4', rating=3,
+                                                     created_at='2023-11-06 00:00:00Z')
