@@ -3,9 +3,9 @@ from rest_framework import generics, filters
 from rest_framework.generics import get_object_or_404
 
 from api.models import Profile, ProductCategory, Rent, Product, ProductReviews, ProductImage
-from api.permissions import ProfileEditIfIsOwner, ProfileRentsIfIsOwner, ProductEditIfIsOwner, ProductImageEditIfIsOwner
+from api.permissions import ProfileEditIfIsOwner, ProfileRentsIfIsOwner, ProductEditIfIsOwner, ProductImageEditIfIsOwner, RentDeleteIfIsOwner, RentPatchIfIsOwnerOrRenter
 from api.serializers import ProfileSerializer, ProfileSerializerUpdate, ProductCategorySerializer, \
-    ProductSerializer, RentSerializer, RentCreateSerializer, ProductReviewsSerializer, ProductImageSerializer
+    ProductSerializer, RentSerializer, RentCreateSerializer, ProductReviewsSerializer, ProductImageSerializer, RentStatusSerializer
 from loopable.pagination import CustomPagination
 
 
@@ -124,3 +124,29 @@ class RentCreateAPIView(generics.CreateAPIView):
     def perform_create(self, serializer):
         # Get owner from the request
         serializer.save(renter_id=self.request.user.username, status='pending', payment_method='OPP')
+
+
+# /rents/<str:pk>/ (only owner of product can update to accepted or rejected, and the renter can set status to canceled)
+class RentUpdateAPIView(generics.UpdateAPIView):
+    queryset = Rent.objects.all()
+    serializer_class = RentStatusSerializer
+    permission_classes = [RentPatchIfIsOwnerOrRenter]
+
+    def put(self, request, *args, **kwargs):
+        return self.http_method_not_allowed(request, *args, **kwargs)
+
+    def get_object(self):
+        return get_object_or_404(Rent, id=self.kwargs.get('pk'))
+
+    def handle_no_permission(self):
+        self.permission_denied(self.request, message='You do not have permission to perform this action.')
+
+
+# /rents/<str:pk>/ (only owner of product can delete, temporary and disabled in urls.py by default)
+class RentDestroyAPIView(generics.DestroyAPIView):
+    queryset = Rent.objects.all()
+    serializer_class = RentSerializer
+    permission_classes = [RentDeleteIfIsOwner]
+
+    def get_object(self):
+        return get_object_or_404(Rent, id=self.kwargs.get('pk'))

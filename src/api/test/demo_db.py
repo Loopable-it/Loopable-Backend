@@ -38,3 +38,4 @@ class DemoDB:
                                       start_time='2023-11-03 00:00:00Z', end_time='2023-11-04 00:00:00Z')
         self.r3 = Rent.objects.create(product=self.p1, renter=self.profile2, price=10,
                                       start_time='2023-11-05 00:00:00Z', end_time='2023-11-06 00:00:00Z')
+        

@@ -64,3 +64,51 @@ class RentsAPITests(APITestCaseBase):
         self.assertEqual(self.demo_db.r4c.payment_method, 'OPP')
         self.assertEqual(self.demo_db.r4c.price, 40)
         self.assertEqual(self.demo_db.r4c.status, 'pending')
+
+    def test_rent_patch_owner(self):
+        """
+        Ensure that the product of the owner can set to accepted or rejected a rent, but not canceled.
+        """
+        # Use r3 since it is rented by profile2
+        response = self.auth_client.patch(f'/api/v1/rents/{self.demo_db.r3.id}/', {
+            'status': 'accepted'
+        })
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.demo_db.r3.refresh_from_db()
+
+        response = self.auth_client.patch(f'/api/v1/rents/{self.demo_db.r3.id}/', {
+            'status': 'rejected'
+        })
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.demo_db.r3.refresh_from_db()
+
+        response = self.auth_client.patch(f'/api/v1/rents/{self.demo_db.r3.id}/', {
+            'status': 'canceled'
+        })
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.demo_db.r3.refresh_from_db()
+
+
+    def test_rent_patch_renter(self):
+        """
+        Ensure that the renter (client 2) can set to canceled a rent, but not accepted or rejected.
+        """
+        # Use r3 since it is rented by profile2
+        response = self.auth_client2.patch(f'/api/v1/rents/{self.demo_db.r3.id}/', {
+            'status': 'accepted'
+        })
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.demo_db.r3.refresh_from_db()
+
+        response = self.auth_client2.patch(f'/api/v1/rents/{self.demo_db.r3.id}/', {
+            'status': 'rejected'
+        })
+        print(response.json())
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.demo_db.r3.refresh_from_db()
+
+        response = self.auth_client2.patch(f'/api/v1/rents/{self.demo_db.r3.id}/', {
+            'status': 'canceled'
+        })
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.demo_db.r3.refresh_from_db()
