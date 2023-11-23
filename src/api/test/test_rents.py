@@ -69,7 +69,6 @@ class RentsAPITests(APITestCaseBase):
         """
         Ensure that the product of the owner can set to accepted or rejected a rent, but not canceled.
         """
-        # Use r3 since it is rented by profile2
         response = self.auth_client.patch(f'/api/v1/rents/{self.demo_db.r3.id}/', {
             'status': 'accepted'
         })
@@ -93,7 +92,6 @@ class RentsAPITests(APITestCaseBase):
         """
         Ensure that the renter (client 2) can set to canceled a rent, but not accepted or rejected.
         """
-        # Use r3 since it is rented by profile2
         response = self.auth_client2.patch(f'/api/v1/rents/{self.demo_db.r3.id}/', {
             'status': 'accepted'
         })
