@@ -87,7 +87,6 @@ class RentsAPITests(APITestCaseBase):
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.demo_db.r3.refresh_from_db()
 
-
     def test_rent_patch_renter(self):
         """
         Ensure that the renter (client 2) can set to canceled a rent, but not accepted or rejected.

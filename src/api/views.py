@@ -4,9 +4,11 @@ from rest_framework import generics, filters
 from rest_framework.generics import get_object_or_404
 
 from api.models import Profile, ProductCategory, Rent, Product, ProductReviews, ProductImage
-from api.permissions import ProfileEditIfIsOwner, ProfileRentsIfIsOwner, ProductEditIfIsOwner, ProductImageEditIfIsOwner, RentDeleteIfIsOwner, RentPatchIfIsOwnerOrRenter
+from api.permissions import ProfileEditIfIsOwner, ProfileRentsIfIsOwner, ProductEditIfIsOwner, \
+    ProductImageEditIfIsOwner, RentDeleteIfIsOwner, RentPatchIfIsOwnerOrRenter
 from api.serializers import ProfileSerializer, ProfileSerializerUpdate, ProductCategorySerializer, \
-    ProductSerializer, RentSerializer, RentCreateSerializer, ProductReviewsSerializer, ProductImageSerializer, RentStatusSerializer
+    ProductSerializer, RentSerializer, RentCreateSerializer, ProductReviewsSerializer, \
+    ProductImageSerializer, RentStatusSerializer
 from loopable.pagination import CustomPagination
 
 
