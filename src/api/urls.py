@@ -19,7 +19,6 @@ urlpatterns = [
     path('reviews/', views.ProductReviewsListCreateAPIView.as_view()),  # TODOOO: fix and test e filtri per utente
     path('rents/', views.RentCreateAPIView.as_view()),
     path('rents/<str:pk>/', views.RentUpdateAPIView.as_view()),
-    # path('rents/<str:pk>/delete', views.RentDestroyAPIView.as_view()),
 ]
 
 

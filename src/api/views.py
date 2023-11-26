@@ -5,7 +5,7 @@ from rest_framework.generics import get_object_or_404
 
 from api.models import Profile, ProductCategory, Rent, Product, ProductReviews, ProductImage
 from api.permissions import ProfileEditIfIsOwner, ProfileRentsIfIsOwner, ProductEditIfIsOwner, \
-    ProductImageEditIfIsOwner, RentDeleteIfIsOwner, RentPatchIfIsOwnerOrRenter
+    ProductImageEditIfIsOwner, RentPatchIfIsOwnerOrRenter
 from api.serializers import ProfileSerializer, ProfileSerializerUpdate, ProductCategorySerializer, \
     ProductSerializer, RentSerializer, RentCreateSerializer, ProductReviewsSerializer, \
     ProductImageSerializer, RentStatusSerializer
@@ -151,13 +151,3 @@ class RentUpdateAPIView(generics.UpdateAPIView):
 
     def handle_no_permission(self):
         self.permission_denied(self.request, message='You do not have permission to perform this action.')
-
-
-# /rents/<str:pk>/ (only owner of product can delete, temporary and disabled in urls.py by default)
-class RentDestroyAPIView(generics.DestroyAPIView):
-    queryset = Rent.objects.all()
-    serializer_class = RentSerializer
-    permission_classes = [RentDeleteIfIsOwner]
-
-    def get_object(self):
-        return get_object_or_404(Rent, id=self.kwargs.get('pk'))

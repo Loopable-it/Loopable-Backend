@@ -56,7 +56,7 @@ class ProfileRentsIfIsOwner(permissions.BasePermission):
         return True
 
 
-# Only owner can set to accepted or rejected, only renter can set to canceled
+# WARNING: Only owner can set to accepted or rejected, only renter can set to canceled
 class RentPatchIfIsOwnerOrRenter(permissions.BasePermission):
     def has_permission(self, request, view):
         return request.user.is_authenticated is True
@@ -74,16 +74,5 @@ class RentPatchIfIsOwnerOrRenter(permissions.BasePermission):
 
         if request.method == 'GET':
             return False
-
-        return False
-
-
-class RentDeleteIfIsOwner(permissions.BasePermission):
-    def has_permission(self, request, view):
-        return request.user.is_authenticated is True
-
-    def has_object_permission(self, request, view, obj):
-        if obj.product.owner.id == request.user.username:
-            return True
 
         return False
