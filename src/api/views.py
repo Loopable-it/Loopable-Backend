@@ -130,13 +130,11 @@ class RentCreateAPIView(generics.CreateAPIView):
 
 
 # /rents/<str:pk>/ (only owner of product can update to accepted or rejected, and the renter can set status to canceled)
-class RentUpdateAPIView(generics.UpdateAPIView):
+class RentUpdateAPIView(generics.RetrieveUpdateAPIView):
     queryset = Rent.objects.all()
     serializer_class = RentStatusSerializer
     permission_classes = [RentPatchIfIsOwnerOrRenter]
-
-    def put(self, request, *args, **kwargs):
-        return self.http_method_not_allowed(request, *args, **kwargs)
+    http_method_names = ['get', 'patch', 'options']
 
     def patch(self, request, *args, **kwargs):
         instance = self.get_object()
