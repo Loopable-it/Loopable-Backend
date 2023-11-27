@@ -69,3 +69,14 @@ class RentSerializer(serializers.ModelSerializer):
         model = Rent
         fields = '__all__'
         read_only_fields = ('id', 'renter', 'created_at', 'updated_at')
+
+
+class RentStatusSerializer(serializers.ModelSerializer):
+    product = ProductSerializer(read_only=True)
+
+    class Meta:
+        model = Rent
+        fields = '__all__'
+        read_only_fields = (
+            'id', 'product', 'renter', 'price', 'start_time', 'end_time', 'payment_method', 'created_at', 'updated_at'
+            )

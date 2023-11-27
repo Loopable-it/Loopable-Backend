@@ -18,6 +18,7 @@ urlpatterns = [
     path('products/<str:pk>/images/<str:id_img>/', views.ProductImageDestroyAPIView.as_view()),
     path('reviews/', views.ProductReviewsListCreateAPIView.as_view()),  # TODOOO: fix and test e filtri per utente
     path('rents/', views.RentCreateAPIView.as_view()),
+    path('rents/<str:pk>/', views.RentUpdateAPIView.as_view()),
 ]
 
 
