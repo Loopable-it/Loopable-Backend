@@ -100,7 +100,6 @@ class RentsAPITests(APITestCaseBase):
         response = self.auth_client2.patch(f'/api/v1/rents/{self.demo_db.r3.id}/', {
             'status': 'rejected'
         })
-        print(response.json())
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.demo_db.r3.refresh_from_db()
 
