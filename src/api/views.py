@@ -5,9 +5,7 @@ from rest_framework.generics import get_object_or_404
 
 from api.models import Profile, ProductCategory, Rent, Product, ProductReviews, ProductImage
 from api.permissions import ProfileEditIfIsOwner, ProfileRentsIfIsOwner, ProductEditIfIsOwner, \
-    ProductImageEditIfIsOwner, ReviewsIfIsRenter
-from api.permissions import ProfileEditIfIsOwner, ProfileRentsIfIsOwner, ProductEditIfIsOwner, \
-    ProductImageEditIfIsOwner, RentPatchIfIsOwnerOrRenter
+    ProductImageEditIfIsOwner, RentPatchIfIsOwnerOrRenter, ReviewsIfIsRenter
 from api.serializers import ProfileSerializer, ProfileSerializerUpdate, ProductCategorySerializer, \
     ProductSerializer, RentSerializer, RentCreateSerializer, ProductReviewsSerializer, \
     ProductImageSerializer, RentStatusSerializer
