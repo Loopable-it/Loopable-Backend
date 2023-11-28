@@ -72,3 +72,28 @@ class ReviewsIfIsRenter(permissions.BasePermission):
 
         self.message = 'You can\'t review this product'
         return False
+
+
+class RentPatchIfIsOwnerOrRenter(permissions.BasePermission):
+    edit_methods = ('PATCH',)
+
+    def has_permission(self, request, view):
+        return request.user.is_authenticated is True
+
+    def has_object_permission(self, request, view, obj):
+
+        if request.method == 'GET':
+            if request.user.username in (obj.product.owner.id, obj.renter.id):
+                return True
+
+        if request.method in self.edit_methods and obj.product.owner.id == request.user.username:
+            if request.data.get('status') not in ['accepted', 'rejected']:
+                return False
+            return True
+
+        if request.method in self.edit_methods and obj.renter.id == request.user.username:
+            if request.data.get('status') != 'canceled':
+                return False
+            return True
+
+        return False

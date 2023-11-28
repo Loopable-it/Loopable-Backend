@@ -18,6 +18,7 @@ urlpatterns = [
     path('products/<str:pk>/images/<str:id_img>/', views.ProductImageDestroyAPIView.as_view()),
     path('reviews/', views.ProductReviewsCreateAPIView.as_view()),
     path('rents/', views.RentCreateAPIView.as_view()),
+    path('rents/<str:pk>/', views.RentUpdateAPIView.as_view()),
 ]
 
 

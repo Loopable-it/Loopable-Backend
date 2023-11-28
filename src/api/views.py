@@ -1,12 +1,16 @@
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.response import Response
 from rest_framework import generics, filters
 from rest_framework.generics import get_object_or_404
 
 from api.models import Profile, ProductCategory, Rent, Product, ProductReviews, ProductImage
 from api.permissions import ProfileEditIfIsOwner, ProfileRentsIfIsOwner, ProductEditIfIsOwner, \
     ProductImageEditIfIsOwner, ReviewsIfIsRenter
+from api.permissions import ProfileEditIfIsOwner, ProfileRentsIfIsOwner, ProductEditIfIsOwner, \
+    ProductImageEditIfIsOwner, RentPatchIfIsOwnerOrRenter
 from api.serializers import ProfileSerializer, ProfileSerializerUpdate, ProductCategorySerializer, \
-    ProductSerializer, RentSerializer, RentCreateSerializer, ProductReviewsSerializer, ProductImageSerializer
+    ProductSerializer, RentSerializer, RentCreateSerializer, ProductReviewsSerializer, \
+    ProductImageSerializer, RentStatusSerializer
 from loopable.pagination import CustomPagination
 
 
@@ -140,3 +144,25 @@ class ProductReviewsListAPIView(generics.ListAPIView):
         product_id = self.kwargs['pk']
         get_object_or_404(Product, id=product_id)
         return ProductReviews.objects.filter(product=product_id).order_by('created_at')
+
+
+# /rents/<str:pk>/ (only owner of product can update to accepted or rejected, and the renter can set status to canceled)
+class RentUpdateAPIView(generics.RetrieveUpdateAPIView):
+    queryset = Rent.objects.all()
+    serializer_class = RentStatusSerializer
+    permission_classes = [RentPatchIfIsOwnerOrRenter]
+    http_method_names = ['get', 'patch', 'options']
+
+    def patch(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.check_object_permissions(self.request, instance)
+        self.perform_update(serializer)
+        return Response(serializer.data)
+
+    def get_object(self):
+        return get_object_or_404(Rent, id=self.kwargs.get('pk'))
+
+    def handle_no_permission(self):
+        self.permission_denied(self.request, message='You do not have permission to perform this action.')
