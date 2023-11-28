@@ -108,3 +108,15 @@ class RentsAPITests(APITestCaseBase):
         })
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.demo_db.r3.refresh_from_db()
+
+    def test_rent_get_by_id(self):
+        """
+        Ensure that only renter or owner can get the rent by id
+        """
+        response = self.auth_client.get(f'/api/v1/rents/{self.demo_db.r3.id}/')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.demo_db.r3.refresh_from_db()
+
+        response = self.auth_client2.get(f'/api/v1/rents/{self.demo_db.r3.id}/')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.demo_db.r3.refresh_from_db()
