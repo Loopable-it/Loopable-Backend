@@ -108,7 +108,7 @@ class ProductImage(models.Model):
 class ProductReviews(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='product_reviews')
-    owner = models.ForeignKey(Profile, on_delete=models.PROTECT, related_name='reviews')
+    created_by = models.ForeignKey(Profile, on_delete=models.PROTECT, related_name='reviews')
     content = models.TextField(max_length=4096)
     rating = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1), MaxValueValidator(5)])
     created_at = models.DateTimeField(auto_now_add=True)

@@ -5,7 +5,7 @@ from rest_framework.generics import get_object_or_404
 
 from api.models import Profile, ProductCategory, Rent, Product, ProductReviews, ProductImage
 from api.permissions import ProfileEditIfIsOwner, ProfileRentsIfIsOwner, ProductEditIfIsOwner, \
-    ProductImageEditIfIsOwner, RentPatchIfIsOwnerOrRenter
+    ProductImageEditIfIsOwner, RentPatchIfIsOwnerOrRenter, ReviewsIfIsRenter
 from api.serializers import ProfileSerializer, ProfileSerializerUpdate, ProductCategorySerializer, \
     ProductSerializer, RentSerializer, RentCreateSerializer, ProductReviewsSerializer, \
     ProductImageSerializer, RentStatusSerializer
@@ -111,11 +111,13 @@ class ProductImageDestroyAPIView(generics.DestroyAPIView):
 
 
 # /reviews/
-class ProductReviewsListCreateAPIView(generics.ListCreateAPIView):
+class ProductReviewsCreateAPIView(generics.CreateAPIView):
     queryset = ProductReviews.objects.all().order_by('created_at')
     serializer_class = ProductReviewsSerializer
     pagination_class = CustomPagination
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['id', 'product', 'created_by']
+    permission_classes = [ReviewsIfIsRenter]
     search_fields = ['content']
 
 
@@ -127,6 +129,19 @@ class RentCreateAPIView(generics.CreateAPIView):
     def perform_create(self, serializer):
         # Get owner from the request
         serializer.save(renter_id=self.request.user.username, status='pending', payment_method='OPP')
+
+
+class ProductReviewsListAPIView(generics.ListAPIView):
+    serializer_class = ProductReviewsSerializer
+    pagination_class = CustomPagination
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
+    filterset_fields = ['created_by', 'rating']
+    ordering_fields = ['created_at', 'rating']
+
+    def get_queryset(self):
+        product_id = self.kwargs['pk']
+        get_object_or_404(Product, id=product_id)
+        return ProductReviews.objects.filter(product=product_id).order_by('created_at')
 
 
 # /rents/<str:pk>/ (only owner of product can update to accepted or rejected, and the renter can set status to canceled)

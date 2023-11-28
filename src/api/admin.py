@@ -29,8 +29,8 @@ class ProductImageAdmin(admin.ModelAdmin):
 
 @admin.register(ProductReviews)
 class ProductReviewsAdmin(admin.ModelAdmin):
-    list_display = ('id', 'product', 'owner', 'rating')
-    readonly_fields = ('id', 'product', 'owner', 'created_at')
+    list_display = ('id', 'product', 'created_by', 'rating')
+    readonly_fields = ('id', 'product', 'created_by', 'created_at')
 
 
 @admin.register(Rent)

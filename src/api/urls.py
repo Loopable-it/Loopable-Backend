@@ -13,10 +13,10 @@ urlpatterns = [
     path('product-categories/', views.ProductCategoryListAPIView.as_view()),
     path('products/', views.ProductListCreateAPIView.as_view()),
     path('products/<str:pk>/', views.ProductRetrieveUpdateAPIView.as_view()),
-    # path('products/<str:pk>/reviews/', ),
+    path('products/<str:pk>/reviews/', views.ProductReviewsListAPIView.as_view()),
     path('products/<str:pk>/images/', views.ProductImageCreateAPIView.as_view()),
     path('products/<str:pk>/images/<str:id_img>/', views.ProductImageDestroyAPIView.as_view()),
-    path('reviews/', views.ProductReviewsListCreateAPIView.as_view()),  # TODOOO: fix and test e filtri per utente
+    path('reviews/', views.ProductReviewsCreateAPIView.as_view()),
     path('rents/', views.RentCreateAPIView.as_view()),
     path('rents/<str:pk>/', views.RentUpdateAPIView.as_view()),
 ]
