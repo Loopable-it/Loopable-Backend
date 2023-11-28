@@ -32,11 +32,6 @@ TODOOOOOOO:
     owner può vedere i noleggi del suo prodotto
 
 - creare modello Business
-
-- /rents/<id>/
-    - servizio per approvare o rifiutare noleggio (solo owner del prodotto)
-    - servizio per cancellare il noleggio (solo owner del rent)
-    - rivedere servizio reviews (solo chi ha noleggiato il prodotto può lasciare una recensione)
 """
 
 if settings.DEBUG or settings.SWAGGER_ALLOWED:  # Docs only if allowed

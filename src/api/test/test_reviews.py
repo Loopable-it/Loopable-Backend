@@ -26,10 +26,17 @@ class ReviewsAPITest(APITestCaseBase):
         """
         Ensure reviews list view works.
         """
+        response = self.auth_client.get('/api/v1/reviews/')
+        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+
         response = self.auth_client.get('/api/v1/products/1234/reviews/')  # fake id
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
         response = self.auth_client.get(f'/api/v1/products/{self.demo_db.p1.id}/reviews/')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.json()['results']), 2)
+
+        response = self.auth_client2.get(f'/api/v1/products/{self.demo_db.p1.id}/reviews/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.json()['results']), 2)
 

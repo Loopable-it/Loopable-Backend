@@ -131,6 +131,7 @@ class RentCreateAPIView(generics.CreateAPIView):
         serializer.save(renter_id=self.request.user.username, status='pending', payment_method='OPP')
 
 
+# /products/<str:pk>/reviews/
 class ProductReviewsListAPIView(generics.ListAPIView):
     serializer_class = ProductReviewsSerializer
     pagination_class = CustomPagination
@@ -146,10 +147,17 @@ class ProductReviewsListAPIView(generics.ListAPIView):
 
 # /rents/<str:pk>/ (only owner of product can update to accepted or rejected, and the renter can set status to canceled)
 class RentUpdateAPIView(generics.RetrieveUpdateAPIView):
-    queryset = Rent.objects.all()
+    http_method_names = ['get', 'patch', 'options']
     serializer_class = RentStatusSerializer
     permission_classes = [RentPatchIfIsOwnerOrRenter]
-    http_method_names = ['get', 'patch', 'options']
+
+    def get_queryset(self):
+        if getattr(self, 'swagger_fake_view', False):
+            # Queryset just for swagger schema generation metadata
+            return Rent.objects.none()
+        renter_id = self.kwargs['pk']
+        return (Rent.objects.prefetch_related('product').prefetch_related('product__images')
+                .filter(renter=renter_id).order_by('created_at'))
 
     def patch(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -161,6 +169,3 @@ class RentUpdateAPIView(generics.RetrieveUpdateAPIView):
 
     def get_object(self):
         return get_object_or_404(Rent, id=self.kwargs.get('pk'))
-
-    def handle_no_permission(self):
-        self.permission_denied(self.request, message='You do not have permission to perform this action.')
