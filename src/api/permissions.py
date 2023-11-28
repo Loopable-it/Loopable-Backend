@@ -60,11 +60,12 @@ class ReviewsIfIsRenter(permissions.BasePermission):
     def __init__(self):
         self.message = None
 
-    def has_object_permission(self, request, view, obj):
-        print(request.data)
-
-        count_prent = Rent.objects.filter(product_id=request.data['product'],
-                                          renter_id=request.data['created_by']).count()
+    def has_permission(self, request, view):
+        try:
+            count_prent = Rent.objects.filter(product_id=request.data['product'],
+                                              renter_id=request.data['created_by']).count()
+        except KeyError:
+            return True
 
         if count_prent > 0:
             return True

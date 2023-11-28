@@ -51,11 +51,17 @@ class ReviewsAPITest(APITestCaseBase):
         response = self.auth_client.post('/api/v1/reviews/')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-        response = self.auth_client.post('/api/v1/reviews/', {})
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        data = {
+            'product': self.demo_db.p4.id,
+            'rating': 5,
+            'content': 'Test review',
+            'created_by': self.demo_db.profile1.id
+        }
+        response = self.auth_client.post('/api/v1/reviews/', data)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
         data = {
-            'product': self.demo_db.p1.id,
+            'product': self.demo_db.p3.id,
             'rating': 5,
             'content': 'Test review',
             'created_by': self.demo_db.profile1.id
@@ -64,7 +70,7 @@ class ReviewsAPITest(APITestCaseBase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(ProductReviews.objects.count(), 5)
         product_review = ProductReviews.objects.get(id=response.json()['id'])
-        self.assertEqual(product_review.product_id, self.demo_db.p1.id)
+        self.assertEqual(product_review.product_id, self.demo_db.p3.id)
         self.assertEqual(product_review.rating, data['rating'])
         self.assertEqual(product_review.content, data['content'])
         self.assertEqual(product_review.created_by_id, self.demo_db.profile1.id)
