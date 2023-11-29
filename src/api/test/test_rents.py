@@ -118,3 +118,14 @@ class RentsAPITests(APITestCaseBase):
 
         response = self.auth_client2.get(f'/api/v1/rents/{self.demo_db.r3.id}/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_rents_of_products_owned_by_user(self):
+        """
+        Ensure that only owner can get the rents of products owned by him
+        """
+        response = self.auth_client.get(f'/api/v1/users/{self.demo_db.profile1.id}/products/rents/')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.json()['results']), 1)
+
+        response = self.auth_client2.get(f'/api/v1/users/{self.demo_db.profile1.id}/products/rents/')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
