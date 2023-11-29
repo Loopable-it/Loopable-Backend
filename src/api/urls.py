@@ -10,6 +10,7 @@ urlpatterns = [
     path('users/', views.ProfileListAPIView.as_view()),
     path('users/<str:pk>/', views.ProfileRetrieveUpdateAPIView.as_view()),
     path('users/<str:pk>/rents/', views.ProfileRentListAPIView.as_view()),  # user is the render
+    path('users/<str:pk>/reviews/', views.ProfileReviewsListAPIView.as_view()),
     path('product-categories/', views.ProductCategoryListAPIView.as_view()),
     path('products/', views.ProductListCreateAPIView.as_view()),
     path('products/<str:pk>/', views.ProductRetrieveUpdateAPIView.as_view()),
