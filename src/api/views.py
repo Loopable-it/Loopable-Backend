@@ -56,6 +56,7 @@ class ProfileRentListAPIView(generics.ListAPIView):
         return (Rent.objects.prefetch_related('product').prefetch_related('product__images')
                 .filter(renter=renter_id).order_by('created_at'))
 
+
 # /users/<str:pk>/products/rents/
 class ProfileReviewsListAPIView(generics.ListAPIView):
     serializer_class = ProductReviewsSerializer
