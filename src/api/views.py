@@ -57,6 +57,18 @@ class ProfileRentListAPIView(generics.ListAPIView):
                 .filter(renter=renter_id).order_by('created_at'))
 
 
+# /users/<str:pk>/products/rents/
+class ProfileReviewsListAPIView(generics.ListAPIView):
+    serializer_class = ProductReviewsSerializer
+    pagination_class = CustomPagination
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
+    filterset_fields = ['product', 'rating']
+
+    def get_queryset(self):
+        profile_id = get_object_or_404(Profile, id=self.kwargs['pk'])
+        return ProductReviews.objects.filter(created_by=profile_id).order_by('created_at')
+
+
 # /users/<str:pk>/products/rents/ (Only owner of product can view)
 class ProfileProductRentListAPIView(generics.ListAPIView):
     serializer_class = RentSerializer
@@ -158,8 +170,7 @@ class ProductReviewsListAPIView(generics.ListAPIView):
     ordering_fields = ['created_at', 'rating']
 
     def get_queryset(self):
-        product_id = self.kwargs['pk']
-        get_object_or_404(Product, id=product_id)
+        product_id = get_object_or_404(Product, id=self.kwargs['pk'])
         return ProductReviews.objects.filter(product=product_id).order_by('created_at')
 
 
