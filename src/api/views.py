@@ -152,8 +152,7 @@ class ProductReviewsListAPIView(generics.ListAPIView):
     ordering_fields = ['created_at', 'rating']
 
     def get_queryset(self):
-        product_id = self.kwargs['pk']
-        get_object_or_404(Product, id=product_id)
+        product_id = get_object_or_404(Product, id=self.kwargs['pk'])
         return ProductReviews.objects.filter(product=product_id).order_by('created_at')
 
 
