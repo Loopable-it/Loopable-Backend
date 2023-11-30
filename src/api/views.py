@@ -64,8 +64,7 @@ class ProfileReviewsListAPIView(generics.ListAPIView):
     filterset_fields = ['product', 'rating']
 
     def get_queryset(self):
-        profile_id = self.kwargs['pk']
-        get_object_or_404(Profile, id=profile_id)
+        profile_id = get_object_or_404(Profile, id=self.kwargs['pk'])
         return ProductReviews.objects.filter(created_by=profile_id).order_by('created_at')
 
 
