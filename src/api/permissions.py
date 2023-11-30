@@ -56,6 +56,15 @@ class ProfileRentsIfIsOwner(permissions.BasePermission):
         return True
 
 
+class ProfileRentsIfIsProductOwner(permissions.BasePermission):
+    def has_permission(self, request, view):
+        owner_id = view.kwargs.get('pk')
+        return request.user.is_authenticated and owner_id == request.user.username
+
+    def has_object_permission(self, request, view, obj):
+        return True
+
+
 class ReviewsIfIsRenter(permissions.BasePermission):
     def __init__(self):
         self.message = None

@@ -5,7 +5,7 @@ from rest_framework.generics import get_object_or_404
 
 from api.models import Profile, ProductCategory, Rent, Product, ProductReviews, ProductImage
 from api.permissions import ProfileEditIfIsOwner, ProfileRentsIfIsOwner, ProductEditIfIsOwner, \
-    ProductImageEditIfIsOwner, RentPatchIfIsOwnerOrRenter, ReviewsIfIsRenter
+    ProductImageEditIfIsOwner, ProfileRentsIfIsProductOwner, RentPatchIfIsOwnerOrRenter, ReviewsIfIsRenter
 from api.serializers import ProfileSerializer, ProfileSerializerUpdate, ProductCategorySerializer, \
     ProductSerializer, RentSerializer, RentCreateSerializer, ProductReviewsSerializer, \
     ProductImageSerializer, RentStatusSerializer
@@ -66,6 +66,24 @@ class ProfileReviewsListAPIView(generics.ListAPIView):
     def get_queryset(self):
         profile_id = get_object_or_404(Profile, id=self.kwargs['pk'])
         return ProductReviews.objects.filter(created_by=profile_id).order_by('created_at')
+
+
+# /users/<str:pk>/products/rents/ (Only owner of product can view)
+class ProfileProductRentListAPIView(generics.ListAPIView):
+    serializer_class = RentSerializer
+    pagination_class = CustomPagination
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
+    filterset_fields = ['renter', 'status', 'payment_method']
+    ordering_fields = ['created_at', 'start_time', 'end_time']
+    permission_classes = [ProfileRentsIfIsProductOwner]
+
+    def get_queryset(self):
+        if getattr(self, 'swagger_fake_view', False):
+            # Queryset just for swagger schema generation metadata
+            return Rent.objects.none()
+        owner_id = self.kwargs['pk']
+        return (Rent.objects.prefetch_related('product').prefetch_related('product__images')
+                .filter(product__owner=owner_id).order_by('created_at'))
 
 
 # /product-categories/
@@ -151,7 +169,8 @@ class ProductReviewsListAPIView(generics.ListAPIView):
     ordering_fields = ['created_at', 'rating']
 
     def get_queryset(self):
-        product_id = get_object_or_404(Product, id=self.kwargs['pk'])
+        product_id = self.kwargs['pk']
+        get_object_or_404(Product, id=product_id)
         return ProductReviews.objects.filter(product=product_id).order_by('created_at')
 
 
