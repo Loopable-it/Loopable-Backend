@@ -24,6 +24,7 @@ def user_login(email, password):
 if __name__ == '__main__':
     input_email = os.getenv('FIREBASE_LOGIN_EMAIL', None)
     # input_email = 'test_backend_2@loopable.it' # Force email
+    # input_email = 'test_backend_1@loopable.it' # Force email
     input_password = os.getenv('FIREBASE_LOGIN_PWD', None)
     if not input_email:
         input_email = input('Email> ')
