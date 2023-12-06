@@ -103,7 +103,7 @@ class ProductListCreateAPIView(generics.ListCreateAPIView):
     pagination_class = CustomPagination
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['id', 'name', 'category', 'owner', 'active', 'stock_quantity']
-    search_fields = ['name']  # ?search=LIKE in all these fields
+    search_fields = ['name', 'description']  # ?search=LIKE in all these fields
     ordering_fields = ['name']
 
     def perform_create(self, serializer):
