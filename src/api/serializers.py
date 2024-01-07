@@ -3,6 +3,11 @@ from rest_framework import serializers
 from api.models import Profile, ProductCategory, ProductImage, Product, ProductReviews, Rent
 
 
+class CustomDateTimeField(serializers.DateTimeField):
+    def to_representation(self, value):
+        return value.strftime('%Y-%m-%dT%H:%M:%SZ')
+
+
 class ProfileSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(source='user.email', read_only=True)
 
@@ -16,6 +21,8 @@ class ProfileSerializerUpdate(serializers.ModelSerializer):
     This serializer show personal information of a user.
     """
     email = serializers.EmailField(source='user.email', read_only=True)
+    created_at = CustomDateTimeField(read_only=True)
+    updated_at = CustomDateTimeField(read_only=True)
 
     class Meta:
         model = Profile
@@ -30,6 +37,8 @@ class ProductCategorySerializer(serializers.ModelSerializer):
 
 
 class ProductImageSerializer(serializers.ModelSerializer):
+    created_at = CustomDateTimeField(read_only=True)
+
     class Meta:
         model = ProductImage
         fields = '__all__'
@@ -38,6 +47,8 @@ class ProductImageSerializer(serializers.ModelSerializer):
 
 class ProductSerializer(serializers.ModelSerializer):
     images = serializers.SerializerMethodField()
+    created_at = CustomDateTimeField(read_only=True)
+    updated_at = CustomDateTimeField(read_only=True)
 
     class Meta:
         model = Product
@@ -50,12 +61,17 @@ class ProductSerializer(serializers.ModelSerializer):
 
 
 class ProductReviewsSerializer(serializers.ModelSerializer):
+    created_at = CustomDateTimeField(read_only=True)
+
     class Meta:
         model = ProductReviews
         fields = '__all__'
 
 
 class RentCreateSerializer(serializers.ModelSerializer):
+    created_at = CustomDateTimeField(read_only=True)
+    updated_at = CustomDateTimeField(read_only=True)
+
     class Meta:
         model = Rent
         fields = '__all__'
@@ -64,6 +80,10 @@ class RentCreateSerializer(serializers.ModelSerializer):
 
 class RentSerializer(serializers.ModelSerializer):
     product = ProductSerializer(read_only=True)
+    created_at = CustomDateTimeField(read_only=True)
+    updated_at = CustomDateTimeField(read_only=True)
+    start_time = CustomDateTimeField(read_only=True)
+    end_time = CustomDateTimeField(read_only=True)
 
     class Meta:
         model = Rent
@@ -73,6 +93,10 @@ class RentSerializer(serializers.ModelSerializer):
 
 class RentStatusSerializer(serializers.ModelSerializer):
     product = ProductSerializer(read_only=True)
+    created_at = CustomDateTimeField(read_only=True)
+    updated_at = CustomDateTimeField(read_only=True)
+    start_time = CustomDateTimeField(read_only=True)
+    end_time = CustomDateTimeField(read_only=True)
 
     class Meta:
         model = Rent
