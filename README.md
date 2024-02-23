@@ -47,6 +47,16 @@ python src/manage.py migrate  # This will apply migrations to the database
 
 Doing this will create tables in the local database.
 
+## Docker
+
+Dockerfile is available, so you can build the image and run the container with the following commands:
+```bash
+docker build -t loopable-backend .
+docker run -p 8000:8000 --name loopable loopable-backend
+```
+
+Tip: if windows asks you for firewall permissions, allow it.
+
 ### Use the API
 APIs authentication is performed using [JWT tokens](https://en.wikipedia.org/wiki/JSON_Web_Token).
 
