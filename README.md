@@ -57,6 +57,24 @@ docker run -p 8000:8000 --name loopable loopable-backend
 
 Tip: if windows asks you for firewall permissions, allow it.
 
+## Docker Compose
+
+Update your .env by with POSTGRES database settings, for example:
+```dotenv
+POSTGRES_DB=somedatabase
+POSTGRES_USER=someuser
+POSTGRES_PASSWORD=apasswordofsorts
+POSTGRES_HOST=db
+POSTGRES_PORT=5432
+```
+
+A docker-compose.yml is available, and you can run all the services with the following command:
+```bash
+docker-compose up
+```
+
+Automatically, it will make all migrations and create the database.
+
 ### Use the API
 APIs authentication is performed using [JWT tokens](https://en.wikipedia.org/wiki/JSON_Web_Token).
 

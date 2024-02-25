@@ -4,7 +4,12 @@ LABEL authors="AnonymousGCA"
 WORKDIR /code
 EXPOSE 8000
 
-RUN apt install -y git
+RUN apt-get update && apt-get install -y \
+    binutils \
+    libproj-dev \
+    gdal-bin \
+    git \
+    -y
 
 COPY ./requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt

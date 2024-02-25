@@ -85,14 +85,22 @@ WSGI_APPLICATION = 'loopable.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 if 'test' in sys.argv:
+    print('Test environment')
     # Database for test coverage
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db_test.sqlite3',
+            #'ENGINE': 'django.db.backends.sqlite3',
+            #'NAME': BASE_DIR / 'db_test.sqlite3',
+            'ENGINE': 'django.contrib.gis.db.backends.postgis',
+            'NAME': os.getenv('POSTGRES_DB'),
+            'USER': os.getenv('POSTGRES_USER'),
+            'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
+            'HOST': os.getenv('POSTGRES_HOST'),
+            'PORT': os.getenv('POSTGRES_PORT'),
         }
     }
 elif ENVIRONMENT == 'PRODUCTION':
+    print('Production environment')
     DATABASES = {}
     DB_CONF = dj_database_url.config(conn_max_age=600, ssl_require=True)  # From DATABASE_URL env var
     if len(DB_CONF) == 0:
@@ -100,10 +108,17 @@ elif ENVIRONMENT == 'PRODUCTION':
     DATABASES['default'] = DB_CONF
 else:
     # Database for local development
+    print('Local development environment')
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db_local.sqlite3',
+            # 'ENGINE': 'django.db.backends.sqlite3',
+            # 'NAME': BASE_DIR / 'db_test.sqlite3',
+            'ENGINE': 'django.contrib.gis.db.backends.postgis',
+            'NAME': os.getenv('POSTGRES_DB'),
+            'USER': os.getenv('POSTGRES_USER'),
+            'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
+            'HOST': os.getenv('POSTGRES_HOST'),
+            'PORT': os.getenv('POSTGRES_PORT'),
         }
     }
 
