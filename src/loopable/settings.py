@@ -89,8 +89,8 @@ if 'test' in sys.argv:
     # Database for test coverage
     DATABASES = {
         'default': {
-            #'ENGINE': 'django.db.backends.sqlite3',
-            #'NAME': BASE_DIR / 'db_test.sqlite3',
+            # 'ENGINE': 'django.db.backends.sqlite3',
+            # 'NAME': BASE_DIR / 'db_test.sqlite3',
             'ENGINE': 'django.contrib.gis.db.backends.postgis',
             'NAME': os.getenv('POSTGRES_DB'),
             'USER': os.getenv('POSTGRES_USER'),

@@ -75,6 +75,24 @@ docker-compose up
 
 Automatically, it will make all migrations and create the database.
 
+### Working with Docker
+
+After running `docker-compose up` you should have two containers running: one for the database and the other for the backend/loopable.
+You can see them with the following command:
+```bash
+docker ps
+```
+
+You can enter the loopable-backend-web container with the following command:
+```bash
+docker exec -it <CONTAINER_ID> sh
+```
+
+Then, you can run commands such as `python src/manage.py test -v 2`, `flake8`, `pylint`, etc.
+
+To close it, just type `exit`.
+
+
 ### Use the API
 APIs authentication is performed using [JWT tokens](https://en.wikipedia.org/wiki/JSON_Web_Token).
 
