@@ -8,8 +8,7 @@ djangorestframework==3.14.0
 django_filter==23.3
 dj-database-url==2.1.0
 drf-yasg==1.21.7
-git+https://github.com/firebase/firebase-admin-python.git@44b756875fe0183e290ddac5b059b8da073e88dc
-# firebase_admin==6.2.0  # waiting next release to include https://github.com/firebase/firebase-admin-python/pull/714
+firebase_admin==6.4.0
 inflection==0.5.1
 packaging==23.1
 psycopg2-binary==2.9.6
