@@ -1,3 +1,6 @@
+from django.contrib.gis.db.models.functions import Distance
+from django.contrib.gis.geos import fromstr
+from django.contrib.gis.measure import D
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.response import Response
 from rest_framework import generics, filters
@@ -105,6 +108,20 @@ class ProductListCreateAPIView(generics.ListCreateAPIView):
     filterset_fields = ['id', 'name', 'category', 'owner', 'active', 'stock_quantity']
     search_fields = ['name', 'description']  # ?search=LIKE in all these fields
     ordering_fields = ['name']
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+
+        location = self.request.query_params.get('location', None)
+        radius = self.request.query_params.get('radius', None)
+
+        if location is not None and radius is not None:
+            point = fromstr(location, srid=4326)
+            queryset = queryset.filter(location__dwithin=(point, D(km=radius)))
+            queryset = queryset.annotate(distance=Distance('location', point))
+            queryset = queryset.order_by('distance')
+
+        return queryset
 
     def perform_create(self, serializer):
         # Get owner from the request

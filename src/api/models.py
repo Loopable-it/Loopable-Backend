@@ -1,6 +1,7 @@
 import uuid
 
 from django.contrib.auth import get_user_model
+from django.contrib.gis.db.models import PointField
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.db.models.signals import post_save
@@ -80,8 +81,9 @@ class Product(models.Model):
     category = models.ForeignKey(ProductCategory, on_delete=models.PROTECT, related_name='products_list')
     stock_quantity = models.PositiveIntegerField(default=1)
     active = models.BooleanField(default=True)
-    latitude = models.FloatField()  # TODOOO: use PostGIS
-    longitude = models.FloatField()  # TODOOO: use PostGIS
+    # latitude = models.FloatField()  # TODOOO: use PostGIS
+    # longitude = models.FloatField()  # TODOOO: use PostGIS
+    location = PointField(srid=4326, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
