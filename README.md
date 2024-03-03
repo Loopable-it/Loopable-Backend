@@ -14,6 +14,7 @@ Let's try to use [conventional commits](https://cheatography.com/albelop/cheat-s
 ![backend diagram](.github/diagram.jpg "Backend diagram")
 
 ## Run the project
+It is better to follow the instructions to run the project with **Docker**, but you can also run it locally.
 To run the project, you need to have at least **Python 3.9** installed on your PC. 
 Then, you can install all the dependencies in a new virtual environment with the following command:
 ```bash
@@ -47,30 +48,29 @@ python src/manage.py migrate  # This will apply migrations to the database
 
 Doing this will create tables in the local database.
 
-## Docker
+## Run with Docker
 
-Dockerfile is available, so you can build the image and run the container with the following commands:
+`Dockerfile` is available, so you can build the image and run the container with the following commands:
 ```bash
-docker build -t loopable-backend .
+docker build -t loopable-backend ./Dockerfile
 docker run -p 8000:8000 --name loopable loopable-backend
 ```
 
 Tip: if windows asks you for firewall permissions, allow it.
 
-## Docker Compose
+### Docker Compose
 
 Update your .env by with POSTGRES database settings, for example:
 ```dotenv
-POSTGRES_DB=somedatabase
-POSTGRES_USER=someuser
-POSTGRES_PASSWORD=apasswordofsorts
-POSTGRES_HOST=db
-POSTGRES_PORT=5432
+DATABASE_URL_LOCAL=postgres://postgres:postgres@db:5432/loopable
+POSTGRES_DB=loopable
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres
 ```
 
 A docker-compose.yml is available, and you can run all the services with the following command:
 ```bash
-docker-compose up
+docker-compose up --force-recreate --build --timeout 0
 ```
 
 Automatically, it will make all migrations and create the database.
@@ -131,6 +131,10 @@ Run this command to check the code:
 ```bash
 pylint --rcfile=pylintrc ./src
 ```
+or with docker
+```bash
+docker compose -f docker-compose.runs.yml up --build check_pylint
+```
 
 ## Code style
 Flake8 is a Python tool that performs code analysis by combining multiple tools
@@ -141,12 +145,20 @@ Run this command to check the code style:
 ```bash
 flake8 src/ --config=flake8 --show-source --statistics
 ```
+or with docker
+```bash
+docker compose -f docker-compose.runs.yml up --build check_flake
+```
 
 ## Run the tests
 To run the tests, **make sure to have all the environment variables set in the `.env` file** and then 
 run the following command **inside the virtual environment**:
 ```bash
 python src/manage.py test -v 2
+```
+or with docker
+```bash
+docker compose -f docker-compose.runs.yml up --build test_django
 ```
 
 ## Migration
@@ -156,6 +168,10 @@ run the following command **inside the virtual environment**:
 python src/manage.py showmigrations  # Show the migrations status
 python src/manage.py makemigrations  # Create the migration files
 python src/manage.py migrate  # Run the migration (edit database schema)
+```
+or with docker
+```bash
+docker compose -f docker-compose.runs.yml up --build makemigrations
 ```
 
 Remember to run the migration every time you change the models. After that commit also the migration files.
