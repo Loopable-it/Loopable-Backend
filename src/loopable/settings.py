@@ -10,7 +10,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
-import sys
 from pathlib import Path
 
 import dj_database_url
@@ -82,45 +81,17 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'loopable.wsgi.application'
 
+
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-if 'test' in sys.argv:
-    print('Test environment')
-    # Database for test coverage
-    DATABASES = {
-        'default': {
-            # 'ENGINE': 'django.db.backends.sqlite3',
-            # 'NAME': BASE_DIR / 'db_test.sqlite3',
-            'ENGINE': 'django.contrib.gis.db.backends.postgis',
-            'NAME': os.getenv('POSTGRES_DB'),
-            'USER': os.getenv('POSTGRES_USER'),
-            'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
-            'HOST': os.getenv('POSTGRES_HOST'),
-            'PORT': os.getenv('POSTGRES_PORT'),
-        }
-    }
-elif ENVIRONMENT == 'PRODUCTION':
-    print('Production environment')
-    DATABASES = {}
-    DB_CONF = dj_database_url.config(conn_max_age=600, ssl_require=True)  # From DATABASE_URL env var
-    if len(DB_CONF) == 0:
-        raise EnvironmentError(f'Bad DB configuration. Current conf: {DB_CONF} You need to set DATABASE_URL')
-    DATABASES['default'] = DB_CONF
-else:
-    # Database for local development
-    print('Local development environment')
-    DATABASES = {
-        'default': {
-            # 'ENGINE': 'django.db.backends.sqlite3',
-            # 'NAME': BASE_DIR / 'db_test.sqlite3',
-            'ENGINE': 'django.contrib.gis.db.backends.postgis',
-            'NAME': os.getenv('POSTGRES_DB'),
-            'USER': os.getenv('POSTGRES_USER'),
-            'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
-            'HOST': os.getenv('POSTGRES_HOST'),
-            'PORT': os.getenv('POSTGRES_PORT'),
-        }
-    }
+DATABASES = {}
+SSL_REQUIRE = True if ENVIRONMENT == 'PRODUCTION' else False  # pylint: disable=simplifiable-if-expression
+DB_ENV = 'DATABASE_URL' if ENVIRONMENT == 'PRODUCTION' else 'DATABASE_URL_LOCAL'
+DB_CONF = dj_database_url.config(env=DB_ENV, conn_max_age=600, ssl_require=SSL_REQUIRE)  # From DATABASE_URL env var
+if len(DB_CONF) == 0:
+    raise EnvironmentError(f'Bad DB configuration. Current conf: {DB_CONF} You need to set DATABASE_URL')
+DATABASES['default'] = DB_CONF
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
