@@ -1,0 +1,5 @@
+src/db_local.sqlite3
+src/static
+**/*.pyc
+**/__pycache__/
+**/.DS_Store

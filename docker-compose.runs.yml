@@ -1,0 +1,52 @@
+version: '3'
+services:
+
+  backend_prod:
+    build:
+      dockerfile: Dockerfile
+      target: production
+      context: .
+    ports:
+      - "8000:8000"
+    env_file:
+      - ".env"
+
+  test_django:
+    build:
+      dockerfile: Dockerfile
+      target: test_django
+      context: .
+    env_file:
+      - ".env"
+
+  check_pylint:
+    build:
+      dockerfile: Dockerfile
+      target: check_pylint
+      context: .
+    env_file:
+      - ".env"
+
+  check_flake:
+    build:
+      dockerfile: Dockerfile
+      target: check_flake
+      context: .
+
+  makemigrations:
+    build:
+      dockerfile: Dockerfile
+      target: production
+      context: .
+    env_file:
+      - ".env"
+    command: python /app/manage.py makemigrations
+
+  migrate:
+    build:
+      dockerfile: Dockerfile
+      target: production
+      context: .
+    env_file:
+      - ".env"
+    command: python /app/manage.py migrate
